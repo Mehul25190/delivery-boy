@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Delivery Boy",
+    "slug": "Deliveryboy",
+    "description": "Delivery Boy is the application in which a delivery boy see list order and track them",
+    "privacy": "public",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./app/assets/icon.png",
+    "splash": {
+      "image": "./app/assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#58B860"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "app/assets/*"
+    ],
+    "android": {
+      "package": "com.pushpanathan.pushbase"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pushpanathan.pushbase"
+    }
+  }
+}
