@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import * as userActions from "../../actions/user";
 import appStyles from '../../theme/appStyles';
 import styles from './styles';
-
+import { MenuProvider } from 'react-native-popup-menu';
 const cartCount = 1;
 
 class Home extends React.Component {
@@ -57,8 +57,14 @@ class Home extends React.Component {
   };
 
   onPressRecipe = item => {
-    console.log(item);
-    this.props.navigation.navigate('ProductList', { item });
+
+    if(item.status=='Delivered') {
+      this.props.navigation.navigate('ProductList', { item });  
+    }
+    else if(item.status=='Pending' || item.status=='In Process'){
+     this.props.navigation.navigate('Delivered', { item });   
+    }
+    
   };
 
   openControlPanel = () => {
@@ -69,10 +75,12 @@ class Home extends React.Component {
  
 render(){
    return (
+      <MenuProvider customStyles={appStyles.containerProvider} >
       <Container style={[appStyles.container,{ width: Layout.window.width, height: Layout.window.height}]}>
+       
         <Headers
-            IconLeft='arrowleft'
-            onPress={() => this.props.logout()}
+            setLogout={true}
+            
             IconRightF='search'
             setFilter={true}
             IconRightT='sound-mix'
@@ -81,7 +89,7 @@ render(){
             Title='All Orders'
             IconsRightT={styles.IconsRightT}
         />
-      
+   
         <Content enableOnAndroid style={[appStyles.content,{zIndex:-1}]}>
          <View style={styles.MainContainer}>
             <ScrollView contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}>
@@ -99,7 +107,7 @@ render(){
 
         { /*<Catalog {...this.props} />*/}
   </Container>
-    
+        </MenuProvider>
     );
   }
 }

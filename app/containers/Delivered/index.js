@@ -20,7 +20,7 @@ import styles from './styles';
 import {ReturnReason} from '../data/data';
 import CheckBox from 'react-native-check-box';
 
-class ProductList extends React.Component {
+class Delivered extends React.Component {
 
   constructor(props) {
     super(props);
@@ -36,12 +36,12 @@ class ProductList extends React.Component {
 
    componentDidMount() {
     var that = this;
-    var monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May','Jun',
+ var monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May','Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var date = new Date().getDate(); //Current Date
-    var month = monthNames[new Date().getMonth()]; //Current Month
+      var month = monthNames[new Date().getMonth()]; //Current Month
     var year = new Date().getFullYear(); //Current Year
-    var hours = new Date().getHours(); //Current Hours
+   var hours = new Date().getHours(); //Current Hours
     var min = new Date().getMinutes(); //Current Minutes
 
     that.setState({
@@ -55,17 +55,16 @@ class ProductList extends React.Component {
     };
 
     dateFormate(date){
-    var monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May','Jun',
+   var monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May','Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    let orderDate = new Date(date);
-    let getDate=orderDate.getDate() + " "+ monthNames[orderDate.getMonth()] +" "+orderDate.getFullYear();
-    return getDate;
+  let orderDate = new Date(date);
+  let getDate=orderDate.getDate() + " "+ monthNames[orderDate.getMonth()] +" "+orderDate.getFullYear();
+  return getDate;
   }
   
    onPressSubmit = item => {
     this.props.navigation.navigate('Confirmation', { item });
     };
-    
   render(){
     const { navigation } = this.props;
     const getItem = navigation.getParam('item');
@@ -135,29 +134,14 @@ class ProductList extends React.Component {
               <Text style={styles.proTime}>{getItem.time}</Text>
             </Body>
             <Right  style={styles.ListRight}>
-            <View style={styles.RigView}>
-                        <Icon name='camera' type='FontAwesome' style={styles.camera} />
-            </View>  
+           
 
             <View style={[styles.RigView,styles.qtyCol]}>
             <Text style={styles.qtyText}>Qty</Text>
-                <TextInput style={styles.qtyInput}
-                 keyboardType='numeric'
-                    maxLength = {2} value={10}  />
+             <Text style={styles.qtyInput}> {getItem.quantity}</Text>
             </View> 
          
-            <CheckBox
-              style={styles.checkboxStyle}
-                onClick={()=>{
-                this.setState({
-                isChecked:!this.state.isChecked
-                })
-              }}
-              checkedImage={<Icon name='check' type='AntDesign' style={{color:Colors.primary, paddingLeft:5,paddingTop:1}} />}
-              unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
-              style={{color:'transparent'}} /> }
-              isChecked={this.state.isChecked} 
-             />
+           
             </Right>
           </ListItem>
             <ListItem icon style={styles.ListItems} noBorder>
@@ -169,28 +153,14 @@ class ProductList extends React.Component {
                     <Text style={styles.proTime}>{getItem.time}</Text>
             </Body>
             <Right  style={styles.ListRight}>
-            <View style={styles.RigView}>
-                        <Icon name='camera' type='FontAwesome' style={styles.camera} />
-              </View>     
+               
               <View style={[styles.RigView,styles.qtyCol]}>
               <Text style={styles.qtyText}>Qty</Text>
 
-              <TextInput style={styles.qtyInput}
-                   keyboardType='numeric' 
-                      maxLength = {2} value={10}  />
+               <Text style={styles.qtyInput}> {getItem.quantity}</Text>
               </View> 
                  
-                <CheckBox
-                style={styles.checkboxStyle}
-                  onClick={()=>{
-                  this.setState({
-                  Checked:!this.state.Checked
-                  })
-                }}
-                checkedImage={<Icon name='check' type='AntDesign' style={{color:Colors.primary, paddingLeft:5,paddingTop:1}} />}
-                unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons' style={{color:'transparent'}} /> }
-                isChecked={this.state.Checked} 
-               />
+              
             </Right>
           </ListItem>
           </View>
@@ -199,8 +169,8 @@ class ProductList extends React.Component {
         </ScrollView>
        <View style={styles.doneBtnArea}>
        <Button priamary full style={styles.doneBtn}>
-        <TouchableOpacity>
-        <Text style={styles.btnTextDone}>Picked</Text>
+        <TouchableOpacity onPress={()=>this.onPressSubmit('OrderReturnDetail')}>
+        <Text style={styles.btnTextDone}>Delivered</Text>
         </TouchableOpacity>
         </Button>
        </View>
@@ -229,4 +199,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 // Exports
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default connect(mapStateToProps, mapDispatchToProps)(Delivered);

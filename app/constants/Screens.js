@@ -20,7 +20,9 @@ export default {
   ProductList:{
     route: 'ProductList',
   },
- 
+   Delivered:{
+    route: 'Delivered',
+   },
   SignOutStack : {
     route: 'SignOutStack'
   }, 

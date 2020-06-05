@@ -2,19 +2,27 @@ import { StyleSheet } from 'react-native';
 import { Colors, Layout } from '../constants/';
 
 export default StyleSheet.create({
+containerProvider: {
+    flexDirection: 'column',
+    padding: 30,
+  },
+  backdrop: {
+    backgroundColor: 'red',
+    opacity: 0.5,
+  },
   container: {
     flex: 1,
   
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
    // backgroundColor: Colors.primary,
      backgroundColor: 'transparent',
-       flexDirection: 'column',
+     flexDirection: 'column',
   },
   headerLeft: {
     flex: 0,
     paddingLeft:0,
-    width: 38,
-  marginLeft:0,
+    width: 35,
+    marginLeft:0,
     justifyContent:'flex-start',
 
   },
@@ -28,7 +36,8 @@ export default StyleSheet.create({
   },
   searchBar:{
     backgroundColor:'#fff',
-    borderRadius:7
+    borderRadius:7,
+    marginRight:8
    
   },
   statusBar:{
@@ -38,7 +47,8 @@ export default StyleSheet.create({
   },
    searchInput:{
     color:'#AAAAAA',
-    fontSize:14
+    fontSize:14,
+    
   },
   headerTitle:{
     fontSize:18,
@@ -59,6 +69,7 @@ export default StyleSheet.create({
     textAlign:'center',
     alignSelf:'center',
     width:40,
+    paddingBottom:5
   },
   sortBlock:{
     paddingLeft:Layout.indent,
@@ -78,8 +89,9 @@ export default StyleSheet.create({
       height:'auto',
       paddingBottom:5
   },
-   IconsRight:{
+   IconsSearch:{
     color:Colors.white,
+
     
   },
      sortText:{
@@ -131,8 +143,19 @@ export default StyleSheet.create({
     
   fontFamily:'Font-Bold',
   textTransform:'capitalize'
-    
-
+  },
+  LogoutIcon:{
+    color:Colors.white,
+    fontSize:20
+  },
+  LogoutIconArea:{
+    paddingRight:Layout.indent,
+    // backgroundColor:'#ddd',
+    paddingBottom:5,
+    paddingTop:10
+  },
+  StyleIconRightT:{
+    paddingBottom:2
   },
   row: {
     flex: 1,
@@ -260,8 +283,10 @@ export default StyleSheet.create({
  
   
   StyleIconRightS:{
+    paddingTop:10,
+
     paddingLeft:10,
-    paddingRight:Layout.indent
+    paddingRight:Layout.indent-5
   },
    IconRight:{
    textAlign:'center',

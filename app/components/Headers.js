@@ -8,7 +8,7 @@ import {
   Text,
   Header, Item, Input, Left, Body, Title, Right,Icon, List, ListItem
 } from 'native-base';
-
+import * as userActions from "../actions/user";
 import appStyles from '../theme/appStyles';
 import svgs from '../assets/svgs';
 import {Screens, Colors, Layout, ActionTypes } from '../constants';
@@ -19,7 +19,12 @@ import Statusbar from './Statusbar';
 
 import ModalBox from './ModalBox';
 import SetLanguage from './SetLanguage';
-
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,CheckedOption
+} from 'react-native-popup-menu';
 const cartCount = 1;
 
 class Headers extends React.Component {
@@ -45,14 +50,20 @@ class Headers extends React.Component {
     };
   render() {
       const { searcBar } = this.state;
+      const CheckedOption = (props) => (
+  <MenuOption style={{}}  onSelect={() => alert(props.text)} value={props.value} text={(props.checked ? '\u2713 ' : '    ') + ' ' +props.text} />
+)
     return (
+      
+    
+  
       <Header searchBar rounded style={[appStyles.headerStyle]} >
       
-          <Left style={appStyles.headerLeft} icon>
-            <Button transparent style={appStyles.menuBtn}  onPress={() => this.onPress()}>
-              <Icon style={appStyles.menuBar} size={30} color={Colors.white} type="AntDesign" name={this.props.IconLeft} />
-            </Button>
-          </Left>
+        <Left style={appStyles.headerLeft} icon>
+          <Button transparent style={appStyles.menuBtn}  onPress={() => this.onPress()}>
+            <Icon style={appStyles.menuBar} size={30} color={Colors.white} type="AntDesign" name={this.props.IconLeft} />
+          </Button>
+        </Left>
        {this.state.searcBar==true ? 
         (<Item style={[appStyles.searchBar]} >
             <Icon name="search" style={{color:Colors.primary}} />
@@ -64,23 +75,34 @@ class Headers extends React.Component {
 
           </Item>)}
          
-           
+        
          
           <Right style={[appStyles.headersRight,this.props.headersRight]}>
            {
              this.props.setFilter == true &&
 
-             (<TouchableOpacity style={[appStyles.StyleIconRightT]} onPress={()=>this.onPressFilter()}>
-                 <Icon style={[appStyles.IconsRightT,this.props.IconsRightT]} type="Entypo" name={this.props.IconRightT} />
-             </TouchableOpacity>)}
+             ( <Menu style={{paddingBottom:3,}}>
+              <MenuTrigger text=''>
+                <Icon style={[appStyles.IconsRightT,this.props.IconsRightT]} type="Entypo" name={this.props.IconRightT} />
+              </MenuTrigger>
+              <MenuOptions style={{backgroundColor:'#D2EAD2',borderRadius:5}}>
+                
+               
+                  <CheckedOption  value={1} text='Pending' />
+                  <CheckedOption checked value={2} text='In Process' />
+                  <CheckedOption value={3} text='Delivered' />
+                  <CheckedOption value={4} text='Canceled' />
+
+              </MenuOptions>
+            </Menu>)}
 
             { this.state.filter==true &&
              (<View style={appStyles.sortBlock}>
+            
            <Icon name='triangle-up' type='Entypo' style={{position:'absolute', color:'#D2EAD2', top:-20, right:35}} />
          
             <List style={{}}>
-               
-                 <TouchableOpacity>
+                  <TouchableOpacity>
                     <Text style={appStyles.sortText}>Pending</Text>
                   </TouchableOpacity>  
                    <TouchableOpacity>
@@ -94,34 +116,20 @@ class Headers extends React.Component {
                   </TouchableOpacity>  
               </List>
      
-       </View>)} 
-          
-     
-             
-           
-
-      
-
-          {
-            this.props.setCart == true &&
-              <TouchableOpacity style={appStyles.cartIconArea} onPress={()=>this.props.cartPage()}>
-               <Icon style={appStyles.cartIcon} name="cart" />
-               { cartCount >0 && (<Text style={appStyles.cartCount}>{cartCount}</Text>) }
-              </TouchableOpacity>
-          }
-         
-
+           </View>)} 
+            
              <TouchableOpacity style={appStyles.StyleIconRightS} onPress={()=>this.onPressSearch()}>
-             <Icon style={[appStyles.IconsRight,this.props.IconsRight]}  name={this.props.IconRightF} />
+              <Icon style={[appStyles.IconsSearch,this.props.IconsSearch]}  name={this.props.IconRightF} />
              </TouchableOpacity>
-        
-          
-      
+             {  this.props.setLogout == true &&
+                <TouchableOpacity style={appStyles.LogoutIconArea} onPress={()=>this.props.goBack()}>
+                   <Icon style={appStyles.LogoutIcon} name="logout" type="AntDesign" />
+                </TouchableOpacity>
+              }
           </Right>
-          
          
        </Header>
-       
+     
     );
   }
 }
@@ -135,7 +143,8 @@ const mapDispatchToProps = (dispatch) => {
       showModal: () => {
         dispatch({ type: ActionTypes.SHOWMODAL, showModal: true })
       },
-      cartPage: () => dispatch(NavigationActions.navigate({ routeName: Screens.MyCart.route }))
+      Logout: () => dispatch(userActions.logoutUser()),
+      goBack: () => dispatch(NavigationActions.back()),
     };
 };
 

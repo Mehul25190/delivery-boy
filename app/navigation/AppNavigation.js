@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, Animated, Easing } from 'react-native'
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation'
 
-import { SignInEmail, ProductList,  Forgotpassword,
+import { SignInEmail, ProductList, Delivered, Forgotpassword,
     Home, Drawer }
  from "../containers";
 import { Colors, Screens } from "../constants";
@@ -63,9 +63,9 @@ const DrawerNavigation = createStackNavigator({
   
   [Screens.DrawerStack.route]: { screen: DrawerStack },
   [Screens.ProductList.route]: { screen: ProductList },
- 
+  [Screens.Delivered.route]: { screen: Delivered },
   
-  
+    
 }, {
   headerMode: 'none',
    

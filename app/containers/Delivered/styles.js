@@ -118,6 +118,8 @@ alignItems:'flex-end'
   fontFamily:'Font-Medium'
  },
 
+
+  
   proImage:{
   textAlign:'left',
   width:50,
@@ -129,9 +131,7 @@ alignItems:'flex-end'
 borderColor:Colors.primary, width:32, borderRadius:5, borderWidth:2
 },
   qtyInput:{
-    borderWidth:1,
-    borderColor:Colors.primary,
-    borderRadius:5,
+    
     width:40,
     paddingTop:5,
     textAlign:'center',
@@ -139,7 +139,10 @@ borderColor:Colors.primary, width:32, borderRadius:5, borderWidth:2
     alignSelf:'center',
     alignItems:'center',
     paddingBottom:5,
-    color:Colors.black
+    paddingRight:1,
+    marginRight:5,
+    color:Colors.black,
+    
   },
   camera:{
     color:Colors.primary,

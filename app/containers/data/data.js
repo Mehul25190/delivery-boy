@@ -10,7 +10,7 @@ export const allOrders =[
           {
             email: "kev@xyz.com",
             location:"123,Divyajivan Apartment, Naroda, Ahmedabad-235080",
-            status:'Delivered',
+          
             items:"2",
             name:"Kevin",
             surname:"Doe",
@@ -20,6 +20,7 @@ export const allOrders =[
             quantity:2,
             date: '02/15/2020',
             time:'02:05 PM',
+            status:'Delivered'
           }
           ],
        },
@@ -31,7 +32,7 @@ export const allOrders =[
         
           email: "abc@xyz.com",
           location:"123,Divyajivan Apartment, Naroda, Ahmedabad-235080",
-          status:'Delivered',
+        
           items:"2",
           name:"Kevin",
           surname:"Doe",
@@ -41,6 +42,7 @@ export const allOrders =[
           quantity:2,
           date: '02/12/2020',
           time:'10:05 AM',
+          status:'In Process'
           }
           ],
        },
@@ -51,7 +53,6 @@ export const allOrders =[
           {
             email: "kev@xyz.com",
             location:"123,Divyajivan Apartment, Naroda, Ahmedabad-235080",
-            status:'Delivered',
             items:"2",
             name:"Kevin",
             surname:"Doe",
@@ -61,10 +62,11 @@ export const allOrders =[
             quantity:2,
             date: '02/15/2020',
             time:'02:05 PM',
+            status:'Pending'
           }
           ],
        },
-        { 
+       { 
           orderId: "YYM123456789",
           bell:true,
           body: [
@@ -72,7 +74,7 @@ export const allOrders =[
         
           email: "abc@xyz.com",
           location:"123,Divyajivan Apartment, Naroda, Ahmedabad-235080",
-          status:'Delivered',
+        
           items:"2",
           name:"Kevin",
           surname:"Doe",
@@ -82,6 +84,29 @@ export const allOrders =[
           quantity:2,
           date: '02/12/2020',
           time:'10:05 AM',
+          status:'In Process'
+          }
+          ],
+       },
+       { 
+          orderId: "YYM123456789",
+          bell:true,
+          body: [
+          {
+        
+          email: "delboy@xyz.com",
+          location:"456,Divyajivan Apartment, Naroda, Ahmedabad-235080",
+        
+          items:"3",
+          name:"Jevin",
+          surname:"Doe",
+          phone:'9876543210',
+          image:require("../../assets/images/kiwi.png"),
+          proName:'Kiwi (Anaar)',
+          quantity:2,
+          date: '02/12/2020',
+          time:'10:05 AM',
+          status:'Cancel'
           }
           ],
        },

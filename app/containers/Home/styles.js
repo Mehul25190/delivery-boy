@@ -24,6 +24,7 @@ IconsRightT:{
     alignSelf:'center',
     marginLeft:0,
     marginRight:5,
+    paddingBottom:5,
     flexDirection:'row',
     transform: [{rotate: '90deg'}], 
   },
