@@ -37,7 +37,7 @@ const auth = (state = initialState.auth, action) => {
     case ActionTypes.LOGOUT: {
       return {
         ...state,
-        user: null
+        user: action.data
       }
     }
     // Default

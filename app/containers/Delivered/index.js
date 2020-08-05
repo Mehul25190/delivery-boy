@@ -19,6 +19,8 @@ import appStyles from '../../theme/appStyles';
 import styles from './styles';
 import {ReturnReason} from '../data/data';
 import CheckBox from 'react-native-check-box';
+import url from '../../config/api'
+import moment from 'moment'
 
 class Delivered extends React.Component {
 
@@ -66,8 +68,7 @@ class Delivered extends React.Component {
     this.props.navigation.navigate('Confirmation', { item });
     };
   render(){
-    const { navigation } = this.props;
-    const getItem = navigation.getParam('item');
+    const { navigation, orderitem, orderdetail } = this.props;
 
     return (
       <Container style={appStyles.container}>
@@ -82,89 +83,127 @@ class Delivered extends React.Component {
       
    
        <ScrollView>
-        <Card style={[appStyles.addBox,{height:'auto'},styles.orderBox]}>
-          <View style={{paddingLeft:10, paddingTop:10}}>
+       <Card style={[appStyles.addBox, { height: 'auto' }, styles.orderBox]}>
+            <View style={{ paddingLeft: 10, paddingTop: 10 }}>
               <View style={styles.orderInfo}>
                 <Text style={styles.orderId}>
-                Order ID - {getItem.orderId}
+                  Order ID - {orderdetail.orderNumber}
                 </Text>
                 <Text style={styles.Qty}>
-                 {getItem.quantity} Items
+                  {orderdetail.itemCount} Items
                 </Text>
                 <Text style={styles.dateTime}>
-                 {this.dateFormate(getItem.date)} 
+                  {moment(orderdetail.orderDate).format('DD MMM YYYY')}
                 </Text>
-                <Text style={styles.dateTime}>{getItem.time}</Text>
+                <Text style={styles.dateTime}>{moment(orderdetail.orderDate).format('LT')}</Text>
               </View>
-              <View style={{merginRight:Layout.indent, justifyContent:'center', marginTop:5}}>
-                <Text style={styles.title}>{getItem.name}&nbsp;{getItem.surname}</Text>
-                <Text style={styles.title}>{getItem.location}</Text>
-                <Text style={styles.title}>{getItem.phone}</Text>
+              <View style={{ merginRight: Layout.indent, justifyContent: 'center', marginTop: 5 }}>
+                <Text style={styles.title}>{orderdetail.firstName}&nbsp;{orderdetail.lastName}</Text>
+                <Text style={styles.title}>{orderdetail.aptNo},{orderdetail.buildingName},{orderdetail.areaName},{orderdetail.cityName},{orderdetail.zipcode},{orderdetail.state} </Text>
+                <Text style={styles.title}>{orderdetail.mobileNo}</Text>
 
-            
-               </View>
-          </View>
-          <Grid style={styles.reasonView} >
-               <Row style={{height:55}}>
-                <Col style={{justifyContent:'center'}}>
-                  <TouchableOpacity style={{justifyContent:'center', alignItems:'flex-start', flexDirection:'row'}}>
+
+              </View>
+            </View>
+            <Grid style={styles.reasonView} >
+              <Row style={{ height: 55 }}>
+                <Col style={{ justifyContent: 'center' }}>
+                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
                     <Icon name='call' type='Zocial' style={styles.IconStyle} />
                     <Text style={styles.IconText}>Call Customer</Text>
                   </TouchableOpacity>
                 </Col>
-                  
-                 <Col style={{justifyContent:'center',}}>
-                 <TouchableOpacity style={{justifyContent:'center', alignItems:'flex-start', flexDirection:'row'}}>
-                  <Icon name='location-on' type='MaterialIcons' style={styles.IconStyle} />
+
+                <Col style={{ justifyContent: 'center', }}>
+                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
+                    <Icon name='location-on' type='MaterialIcons' style={styles.IconStyle} />
                     <Text style={styles.IconText}>View Map</Text>
-                    
+
                   </TouchableOpacity>
                 </Col>
-               </Row>
-                
-          </Grid>
-         
-          <View style={{paddingLeft:Layout.indent-10,paddingRight:Layout.indent-5}}>
-            <ListItem icon style={styles.ListItems}>
-            <Left>
-               <Image style={styles.proImage} source={getItem.image} />
-            </Left>
-            <Body style={styles.bodyText}>
-              <Text numberOfLines={1}  style={styles.proTitle}>{getItem.proName}</Text>
-              <Text style={styles.proTime}>{getItem.time}</Text>
-            </Body>
-            <Right  style={styles.ListRight}>
-           
+              </Row>
 
-            <View style={[styles.RigView,styles.qtyCol]}>
-            <Text style={styles.qtyText}>Qty</Text>
-             <Text style={styles.qtyInput}> {getItem.quantity}</Text>
-            </View> 
-         
-           
-            </Right>
-          </ListItem>
-            <ListItem icon style={styles.ListItems} noBorder>
-            <Left>
-               <Image style={styles.proImage} source={getItem.image} />
-            </Left>
-            <Body style={styles.bodyText}>
-              <Text numberOfLines={1}  style={styles.proTitle}>{getItem.proName}</Text>
-                    <Text style={styles.proTime}>{getItem.time}</Text>
-            </Body>
-            <Right  style={styles.ListRight}>
-               
-              <View style={[styles.RigView,styles.qtyCol]}>
-              <Text style={styles.qtyText}>Qty</Text>
+            </Grid>
+            {orderitem.map((orderitems, key) => (
 
-               <Text style={styles.qtyInput}> {getItem.quantity}</Text>
-              </View> 
-                 
-              
-            </Right>
-          </ListItem>
-          </View>
-        </Card>
+              <View style={{ paddingLeft: Layout.indent - 10, paddingRight: Layout.indent - 5 }}>
+                <ListItem icon style={styles.ListItems} noBorder>
+                  <Left>
+                    <Image
+                      style={styles.proImage}
+                      source={{ uri: url.imageurl+orderitems.imagePath }}
+                    />
+                  </Left>
+                  <Body style={styles.bodyText}>
+                    <Text numberOfLines={1} style={styles.proTitle}>{orderitems.itemName}</Text>
+
+                    {/* <Text style={styles.proTime}>{getItem.time}</Text> */}
+                  </Body>
+                  <Right style={styles.ListRight}>
+                    <View style={styles.RigView}>
+                      <Icon name='camera' type='FontAwesome' style={styles.camera} />
+                    </View>
+
+                    <View style={[styles.RigView, styles.qtyCol]}>
+                      <Text style={styles.qtyText}>Qty</Text>
+                      <TextInput
+                        style={styles.qtyInput}
+                        value={orderitems.quantity}
+                        keyboardType='numeric'
+                        maxLength={2} />
+                    </View>
+
+                    <CheckBox
+                      style={styles.checkboxStyle}
+                      onClick={() => {
+                        this.setState({
+                          isChecked: !this.state.isChecked
+                        })
+                      }}
+                      checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
+                      unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
+                        style={{ color: 'transparent' }} />}
+                      isChecked={this.state.isChecked}
+                    />
+                  </Right>
+                </ListItem>
+                {/*   <ListItem icon style={styles.ListItems} noBorder>
+                <Left>
+                  <Image style={styles.proImage} source={orderitems.imagePath} />
+                </Left>
+                <Body style={styles.bodyText}>
+                  <Text numberOfLines={1} style={styles.proTitle}>{orderitems.itemName}</Text>
+                   <Text style={styles.proTime}>{orderitems.time}</Text> 
+                </Body>
+                <Right style={styles.ListRight}>
+                  <View style={styles.RigView}>
+                    <Icon name='camera' type='FontAwesome' style={styles.camera} />
+                  </View>
+                  <View style={[styles.RigView, styles.qtyCol]}>
+                    <Text style={styles.qtyText}>Qty</Text>
+
+                    <TextInput style={styles.qtyInput}
+                      keyboardType='numeric'
+                      maxLength={2} value={10} />
+                  </View>
+
+                  <CheckBox
+                    style={styles.checkboxStyle}
+                    onClick={() => {
+                      this.setState({
+                        Checked: !this.state.Checked
+                      })
+                    }}
+                    checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
+                    unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons' style={{ color: 'transparent' }} />}
+                    isChecked={this.state.Checked}
+                  />
+                </Right>
+              </ListItem>
+              */}
+              </View>
+            ))}
+          </Card>
         
         </ScrollView>
        <View style={styles.doneBtnArea}>
@@ -189,6 +228,8 @@ class Delivered extends React.Component {
 const mapStateToProps = (state) => {
   return {
     user: state.auth.user,
+    orderitem: state.order.orderItems,
+    orderdetail: state.order.orderdetails,
   };
 };
 

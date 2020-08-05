@@ -12,6 +12,7 @@ import Headers from "./Headers";
 import Category from "./Category";
 import Slideshow from "./Slideshow";
 import Accordion_Panel from "./Accordion_Panel";
+import ScreenLoader from "./ScreenLoader";
 
 export { 
 	Loader, 
@@ -27,6 +28,7 @@ export {
 	Headers, 
 	Category,
 	Slideshow,
-	Accordion_Panel
+	Accordion_Panel,
+	ScreenLoader,
 	
 };

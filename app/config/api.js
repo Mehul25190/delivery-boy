@@ -1,6 +1,8 @@
 export default {
   // apiBaseUrl: 'http://pushpanathan.com/services/',
-  apiBaseUrl:'',
-  signin: 'geo/user/login',
-  signup: 'geo/user/register',
+  apiBaseUrl: 'http://dev.tieskills.com/foodapp/services/deliveryBoy/',
+  imageurl:'http://dev.tieskills.com/foodapp',
+  signin: 'login',
+  orderlist: 'fetchOrderList',
+  orderdetails: 'fetchOrderDetails'
 }

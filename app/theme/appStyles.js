@@ -316,6 +316,25 @@ containerProvider: {
    
     backgroundColor: '#fff',
 },
+modalBackground: {
+  flex: 1,
+  alignItems: 'center',
+  flexDirection: 'column',
+  justifyContent: 'space-around',
+  backgroundColor: '#FFFFFF40'
+},
+activityIndicatorWrapper: {
+  backgroundColor: Colors.primary,
+  height: 100,
+  width: 100,
+  borderRadius: 10,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-around'
+},
+Lodertext:{
+color:'#FFFF'
+}
 
  
 
