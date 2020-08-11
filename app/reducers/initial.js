@@ -14,6 +14,7 @@ export const initialState = {
 	order: {
 		orderlist: '',
 		orderdetails: '',
-		orderItems:''
+		orderItems:'',
+		updatestatus:''
 	},
 };

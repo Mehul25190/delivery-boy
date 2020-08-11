@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, ImageBackground, Image, TouchableOpacity, date, Picker,TextInput, ScrollView} from 'react-native';
-import _ from 'lodash'; 
-import {Screens, Layout, Colors } from '../../constants';
+import { StyleSheet, View, ImageBackground, Image, TouchableOpacity, date, TextInput, ScrollView } from 'react-native';
+import _ from 'lodash';
+import { Screens, Layout, Colors } from '../../constants';
 import { Logo, Statusbar, Headers } from '../../components';
 import imgs from '../../assets/images';
 import {
@@ -11,13 +11,14 @@ import {
   Spinner,
   Button,
   Text,
-  Header, Left, Body, Title, Right,Card,Grid,Col,Row,ListItem,Item,Input,label
+  Header, Left, Body, Title, Right, Card, Grid, Col, Row, ListItem, Picker, Input, label
 } from 'native-base';
 import { connect } from "react-redux";
 import * as userActions from "../../actions/user";
+import * as orderActions from "../../actions/Order";
 import appStyles from '../../theme/appStyles';
 import styles from './styles';
-import {ReturnReason} from '../data/data';
+import { ReturnReason } from '../data/data';
 import CheckBox from 'react-native-check-box';
 import url from '../../config/api'
 import moment from 'moment'
@@ -26,64 +27,77 @@ class Delivered extends React.Component {
 
   constructor(props) {
     super(props);
-     this.state = {
+    this.state = {
       //default value of the date time
       date: '',
-       time: '',
-  
-        checked: true,
+      time: '',
+      selected: "NULL",
+      checked: true,
     };
 
   }
 
-   componentDidMount() {
+  componentDidMount() {
     var that = this;
- var monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May','Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var date = new Date().getDate(); //Current Date
-      var month = monthNames[new Date().getMonth()]; //Current Month
+    var month = monthNames[new Date().getMonth()]; //Current Month
     var year = new Date().getFullYear(); //Current Year
-   var hours = new Date().getHours(); //Current Hours
+    var hours = new Date().getHours(); //Current Hours
     var min = new Date().getMinutes(); //Current Minutes
 
     that.setState({
       //Setting the value of the date time
-      date:   date + ' ' + month + ' ' + year ,
-      time:   hours + ':' + min 
+      date: date + ' ' + month + ' ' + year,
+      time: hours + ':' + min
     });
   }
-    openControlPanel = () => {
-      this.props.navigation.goBack(); // open drawer
-    };
+  openControlPanel = () => {
+    this.props.navigation.goBack(); // open drawer
+  };
 
-    dateFormate(date){
-   var monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May','Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  let orderDate = new Date(date);
-  let getDate=orderDate.getDate() + " "+ monthNames[orderDate.getMonth()] +" "+orderDate.getFullYear();
-  return getDate;
+  dateFormate(date) {
+    var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let orderDate = new Date(date);
+    let getDate = orderDate.getDate() + " " + monthNames[orderDate.getMonth()] + " " + orderDate.getFullYear();
+    return getDate;
   }
-  
-   onPressSubmit = item => {
-    this.props.navigation.navigate('Confirmation', { item });
-    };
-  render(){
+
+  onPressSubmit(id) {
+    console.log("==============>>>>>>>>>>>HI")
+    this.props.updatestatus(id, this.state.selected).then(res => {
+      console.log("RES",res)
+      if (res.status == "success") {
+        this.props.navigation.goBack();
+      }
+    })
+  };
+
+  onValueChange(value: string) {
+    this.setState({
+      selected: value
+    });
+  }
+
+  render() {
     const { navigation, orderitem, orderdetail } = this.props;
 
     return (
       <Container style={appStyles.container}>
 
-           <Headers
-              IconLeft='arrowleft'
-              onPress={() => this.openControlPanel()}
-             
-              bgColor='transparent'
-              Title='View Order Details'
-             />
-      
-   
-       <ScrollView>
-       <Card style={[appStyles.addBox, { height: 'auto' }, styles.orderBox]}>
+        <Headers
+          IconLeft='arrowleft'
+          onPress={() => this.openControlPanel()}
+
+          bgColor='transparent'
+          Title='View Order Details'
+        />
+
+
+        <ScrollView>
+          <Card style={[appStyles.addBox, { height: 'auto' }, styles.orderBox]}>
             <View style={{ paddingLeft: 10, paddingTop: 10 }}>
               <View style={styles.orderInfo}>
                 <Text style={styles.orderId}>
@@ -131,7 +145,7 @@ class Delivered extends React.Component {
                   <Left>
                     <Image
                       style={styles.proImage}
-                      source={{ uri: url.imageurl+orderitems.imagePath }}
+                      source={{ uri: url.imageurl + orderitems.imagePath }}
                     />
                   </Left>
                   <Body style={styles.bodyText}>
@@ -167,61 +181,46 @@ class Delivered extends React.Component {
                     />
                   </Right>
                 </ListItem>
-                {/*   <ListItem icon style={styles.ListItems} noBorder>
-                <Left>
-                  <Image style={styles.proImage} source={orderitems.imagePath} />
-                </Left>
-                <Body style={styles.bodyText}>
-                  <Text numberOfLines={1} style={styles.proTitle}>{orderitems.itemName}</Text>
-                   <Text style={styles.proTime}>{orderitems.time}</Text> 
-                </Body>
-                <Right style={styles.ListRight}>
-                  <View style={styles.RigView}>
-                    <Icon name='camera' type='FontAwesome' style={styles.camera} />
-                  </View>
-                  <View style={[styles.RigView, styles.qtyCol]}>
-                    <Text style={styles.qtyText}>Qty</Text>
-
-                    <TextInput style={styles.qtyInput}
-                      keyboardType='numeric'
-                      maxLength={2} value={10} />
-                  </View>
-
-                  <CheckBox
-                    style={styles.checkboxStyle}
-                    onClick={() => {
-                      this.setState({
-                        Checked: !this.state.Checked
-                      })
-                    }}
-                    checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
-                    unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons' style={{ color: 'transparent' }} />}
-                    isChecked={this.state.Checked}
-                  />
-                </Right>
-              </ListItem>
-              */}
               </View>
             ))}
           </Card>
-        
+
+          <View>
+            <Picker
+              headerStyle={{ backgroundColor: Colors.primary }}
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-dropdown-circle" style={{ color: '#fff', fontSize: 25 }} />}
+              textStyle={{ color: "#fff", fontSize: 18 }}
+              style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 10, top: 10 }}
+              selectedValue={this.state.selected}
+              onValueChange={this.onValueChange.bind(this)}
+            >
+              <Picker.Item label="Select Status" value="NULL" />
+              <Picker.Item label="Assign back to admin" value="ASGNBACK" />
+              <Picker.Item label="Delivered" value="DEL" />
+              <Picker.Item label="Not delivered" value="NOTDEL" />
+            </Picker>
+          </View>
+
+
         </ScrollView>
-       <View style={styles.doneBtnArea}>
-       <Button priamary full style={styles.doneBtn}>
-        <TouchableOpacity onPress={()=>this.onPressSubmit('OrderReturnDetail')}>
-        <Text style={styles.btnTextDone}>Delivered</Text>
-        </TouchableOpacity>
-        </Button>
-       </View>
-     
-         
-      
-         
-        
-       
-        
+        {/* <View style={styles.doneBtnArea}>
+          <Button priamary full style={styles.doneBtn}>
+            <TouchableOpacity onPress={() => this.onPressSubmit('OrderReturnDetail')}>
+              <Text style={styles.btnTextDone}>Save</Text>
+            </TouchableOpacity>
+          </Button>
+        </View> */}
+        <View style={styles.doneBtnArea}>
+          <Button priamary full style={styles.doneBtn}>
+            <TouchableOpacity onPress={() => this.onPressSubmit(orderdetail.id)}>
+              <Text style={styles.btnTextDone}>Save</Text>
+            </TouchableOpacity>
+          </Button>
+        </View>
+
       </Container>
-     
+
     );
   }
 }
@@ -235,8 +234,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      logout: () => dispatch(userActions.logoutUser()),
-   };
+    logout: () => dispatch(userActions.logoutUser()),
+    updatestatus: (id, status) => dispatch(orderActions.updatestatus({
+      'orderId': id,
+      'status': status,
+    })),
+  };
 };
 
 // Exports

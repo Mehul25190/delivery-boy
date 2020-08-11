@@ -24,6 +24,12 @@ const order = (state = initialState.auth, action) => {
                 orderItems: action.data,
             }
         }
+        case ActionTypes.ORDERSTATUS: {
+            return {
+                ...state,                
+                updatestatus: action.data,
+            }
+        }
 
         // Default
         default: {

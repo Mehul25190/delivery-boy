@@ -37,20 +37,19 @@ class Home extends React.Component {
     };
   }
   componentWillMount() {
-    this.props.orderlist(this.props.user[0].id, 'CNF')
+    this.props.orderlist(this.props.user[0].id,)
     if (this.props.user == null) {
       this.props.navigation.navigate(Screens.SignInStack.route)
     }
   }
   componentDidMount() {
-    this.props.orderlist(this.props.user[0].id, 'CNF')
+    this.props.orderlist(this.props.user[0].id,)
     if (this.props.user == null) {
       this.props.navigation.navigate(Screens.SignInStack.route)
     }
   }
 
   update_Layout = (index) => {
-
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const array = this.props.orderlistdata.map((item) => {
       const newItem = Object.assign({}, item);
@@ -62,17 +61,25 @@ class Home extends React.Component {
     array[index].expanded = true;
     this.props.Updatedata(array)
   };
+
   onPressRecipe = item => {
     const did = this.props.user[0].id
-    if (item.orderStatus == 'CNF') {
+    if (item.orderStatus == 'RET') {
       this.props.orderdetails(did, item.id).then(res => {
         if (res.status == "success") {
-          this.props.navigation.navigate('ProductList');
+         this.props.navigation.navigate('ProductList');
         }
       })
     }
-    else if (item.orderStatus == 'PEN' || item.orderStatus == 'DEL') {
-      this.props.navigation.navigate('Delivered');
+    // else if (item.orderStatus == 'PEN' || item.orderStatus == 'DEL') {
+    //   this.props.navigation.navigate('Delivered');
+    // }
+    else{
+      this.props.orderdetails(did, item.id).then(res => {
+        if (res.status == "success") {
+         this.props.navigation.navigate('Delivered');
+        }
+      })
     }
 
   };
@@ -154,9 +161,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(userActions.logoutUser()),
     Updatedata: (Search) => dispatch({ type: ActionTypes.ORDERLIST, data: Search }),
-    orderlist: (id, status) => dispatch(orderActions.orderlist({
+    orderlist: (id) => dispatch(orderActions.Satrtorderlist({
       'deliveryBoyId': id,
-      'orderStatus': status,
     })),
     orderdetails: (did, id) => dispatch(orderActions.orderdetails({
       'deliveryBoyId': did,

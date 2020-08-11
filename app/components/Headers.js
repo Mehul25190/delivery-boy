@@ -56,8 +56,11 @@ class Headers extends React.Component {
     this.props.orderlist(this.props.user[0].id, status)
   }
   SearchFilterFunction(text) {
-    const Search = this.arrayholder.filter(function (item) {
-      const itemData = item.orderNumber ? item.orderNumber.toUpperCase() : ''.toUpperCase();
+    if(text.length == 0){
+      this.props.Satrtorderlist(this.props.user[0].id)
+    }
+    const Search = this.props.orderlistdata.filter(function (item) {
+      const itemData = item.areaName ? item.areaName.toUpperCase() : ''.toUpperCase();
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
@@ -107,10 +110,12 @@ class Headers extends React.Component {
               <MenuOptions style={{ backgroundColor: '#D2EAD2', borderRadius: 5 }}>
 
 
-                <CheckedOption checked={checked == 'PEN'} value={'PEN'} text='Pending' />
+                <CheckedOption checked={checked == 'PEN'} value={'PEN'} text='In Process' />
                 <CheckedOption checked={checked == 'CNF'} value={'CNF'} text='Conformed' />
                 <CheckedOption checked={checked == 'DEL'} value={'DEL'} text='Delivered' />
-                <CheckedOption checked={checked == 'CAN'} value={'CAN'} text='Canceled' />
+                <CheckedOption checked={checked == 'RET'} value={'RET'} text='Return' />
+
+
 
               </MenuOptions>
             </Menu>)}
@@ -170,6 +175,9 @@ const mapDispatchToProps = (dispatch) => {
     orderlist: (id, status) => dispatch(orderActions.orderlist({
       'deliveryBoyId': id,
       'orderStatus': status,
+    })),
+    Satrtorderlist: (id) => dispatch(orderActions.Satrtorderlist({
+      'deliveryBoyId': id,
     })),
     Updatedata: (Search) => dispatch({ type: ActionTypes.ORDERLIST, data: Search }),
   };
