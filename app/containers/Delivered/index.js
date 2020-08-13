@@ -143,10 +143,10 @@ class Delivered extends React.Component {
               <View style={{ paddingLeft: Layout.indent - 10, paddingRight: Layout.indent - 5 }}>
                 <ListItem icon style={styles.ListItems} noBorder>
                   <Left>
-                    <Image
+                    {/* <Image
                       style={styles.proImage}
                       source={{ uri: url.imageurl + orderitems.imagePath }}
-                    />
+                    /> */}
                   </Left>
                   <Body style={styles.bodyText}>
                     <Text numberOfLines={1} style={styles.proTitle}>{orderitems.itemName}</Text>
@@ -154,17 +154,18 @@ class Delivered extends React.Component {
                     {/* <Text style={styles.proTime}>{getItem.time}</Text> */}
                   </Body>
                   <Right style={styles.ListRight}>
-                    <View style={styles.RigView}>
+                    {/* <View style={styles.RigView}>
                       <Icon name='camera' type='FontAwesome' style={styles.camera} />
-                    </View>
+                    </View> */}
 
                     <View style={[styles.RigView, styles.qtyCol]}>
                       <Text style={styles.qtyText}>Qty</Text>
-                      <TextInput
+                      <Text style={styles.qtyInput}>{orderitems.quantity}</Text>
+                      {/* <Text
                         style={styles.qtyInput}
                         value={orderitems.quantity}
                         keyboardType='numeric'
-                        maxLength={2} />
+                        maxLength={2} /> */}
                     </View>
 
                     <CheckBox
@@ -191,7 +192,7 @@ class Delivered extends React.Component {
               mode="dropdown"
               iosIcon={<Icon name="arrow-dropdown-circle" style={{ color: '#fff', fontSize: 25 }} />}
               textStyle={{ color: "#fff", fontSize: 18 }}
-              style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 10, top: 10 }}
+              style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 15, top: 10,color:'#fff', }}
               selectedValue={this.state.selected}
               onValueChange={this.onValueChange.bind(this)}
             >
