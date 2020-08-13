@@ -37,8 +37,9 @@ class Headers extends React.Component {
       filter: false,
       checked: ''
     }
-    this.arrayholder = this.props.orderlistdata
+
   }
+
   onPress = () => {
     this.setState({ active: !this.state.active });
     this.props.onPress();
@@ -46,6 +47,7 @@ class Headers extends React.Component {
 
   onPressSearch = () => {
     this.setState({ searcBar: !this.state.searcBar });
+    this.arrayholder = this.props.orderlistdata
 
   };
   onPressFilter = () => {
@@ -56,10 +58,11 @@ class Headers extends React.Component {
     this.props.orderlist(this.props.user[0].id, status)
   }
   SearchFilterFunction(text) {
-    if(text.length == 0){
-      this.props.Satrtorderlist(this.props.user[0].id)
-    }
-    const Search = this.props.orderlistdata.filter(function (item) {
+    
+    // if (text.length == 0) {
+    //   this.props.Satrtorderlist(this.props.user[0].id)
+    // }
+    const Search = this.arrayholder.filter(function (item) {
       const itemData = item.areaName ? item.areaName.toUpperCase() : ''.toUpperCase();
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;

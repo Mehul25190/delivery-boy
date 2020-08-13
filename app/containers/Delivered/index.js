@@ -196,6 +196,7 @@ class Delivered extends React.Component {
               onValueChange={this.onValueChange.bind(this)}
             >
               <Picker.Item label="Select Status" value="NULL" />
+              <Picker.Item label="In Progress" value="INP" />
               <Picker.Item label="Assign back to admin" value="ASGNBACK" />
               <Picker.Item label="Delivered" value="DEL" />
               <Picker.Item label="Not delivered" value="NOTDEL" />

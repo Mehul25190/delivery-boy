@@ -5,5 +5,6 @@ export default {
   signin: 'deliveryBoy/login',
   orderlist: 'deliveryBoy/fetchOrderList',
   orderdetails: 'deliveryBoy/fetchOrderDetails',
-  orderstatus:'order/updateOrderStatus'
+  orderstatus:'order/updateOrderStatus',
+  pickedOrder:'order/pickedOrderItem'
 }
