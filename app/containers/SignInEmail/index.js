@@ -97,19 +97,6 @@ class SignInEmail extends React.Component {
                   delay={500} style={{}}
                 >
                   <SignInFormEmail onSubmit={this.signinemail} />
-                  <Row style={{ marginBottom: 10, height: 30 }}>
-                    <Col style={{ width: 100, marginLeft: Layout.indent }}>
-
-                    </Col>
-                    <Col style={{ marginRight: Layout.indent }}>
-                      <Button transparent full
-                        style={[{ justifyContent: 'flex-end' }]} >
-                        <TouchableOpacity onPress={() => this.onForgotpasswordPressHandler()}>
-                          <Text style={[styles.linkTextEmail, appStyles.textRight]} > Forgot Password?</Text>
-                        </TouchableOpacity>
-                      </Button>
-                    </Col>
-                  </Row>
                 </Animatable.View>
                 <Animatable.View
                   animation="fadeIn"

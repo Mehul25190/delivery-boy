@@ -114,7 +114,7 @@ class Headers extends React.Component {
 
 
                 <CheckedOption checked={checked == 'PEN'} value={'PEN'} text='In Process' />
-                <CheckedOption checked={checked == 'CNF'} value={'CNF'} text='Conformed' />
+                <CheckedOption checked={checked == 'CNF'} value={'CNF'} text='Assigned to me' />
                 <CheckedOption checked={checked == 'DEL'} value={'DEL'} text='Delivered' />
                 <CheckedOption checked={checked == 'RET'} value={'RET'} text='Return' />
 

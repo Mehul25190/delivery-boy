@@ -15,6 +15,7 @@ export const initialState = {
 		orderlist: '',
 		orderdetails: '',
 		orderItems:'',
-		updatestatus:''
+		updatestatus:'',
+		pickedOrder:''
 	},
 };

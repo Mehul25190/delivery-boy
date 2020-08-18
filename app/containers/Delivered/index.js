@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ImageBackground, Image, TouchableOpacity, date, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, TouchableOpacity, Linking, TextInput, ScrollView } from 'react-native';
 import _ from 'lodash';
 import { Screens, Layout, Colors } from '../../constants';
 import { Logo, Statusbar, Headers } from '../../components';
@@ -22,6 +22,7 @@ import { ReturnReason } from '../data/data';
 import CheckBox from 'react-native-check-box';
 import url from '../../config/api'
 import moment from 'moment'
+import { showToast } from '../../utils/common';
 
 class Delivered extends React.Component {
 
@@ -32,7 +33,9 @@ class Delivered extends React.Component {
       date: '',
       time: '',
       selected: "NULL",
-      checked: true,
+      isChecked: false,
+      recivedby: '',
+      qty: ''
     };
 
   }
@@ -64,12 +67,40 @@ class Delivered extends React.Component {
     let getDate = orderDate.getDate() + " " + monthNames[orderDate.getMonth()] + " " + orderDate.getFullYear();
     return getDate;
   }
+  dialCall = (phone) => {
+    let phoneNumber = phone;
+    if (Platform.OS !== 'android') {
+      phoneNumber = `telprompt:${phone}`;
+    }
+    else {
+      phoneNumber = `tel:${phone}`;
+    }
+    Linking.canOpenURL(phoneNumber)
+      .then(supported => {
+        console.log(supported)
+        if (!supported) {
+          Alert.alert('Phone number is not available');
+        } else {
+          return Linking.openURL(phoneNumber);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
 
   onPressSubmit(id) {
-    console.log("==============>>>>>>>>>>>HI")
-    this.props.updatestatus(id, this.state.selected).then(res => {
-      console.log("RES",res)
+    var length = this.state.qty.length
+    if (length == '0' || this.state.recivedby == '' || this.state.selected == 'NULL') {
+      return showToast("Please Double Check All Field", "danger")
+    }
+    this.props.updatestatus(id, this.state.selected, this.state.recivedby).then(res => {
+      console.log("RES", res)
       if (res.status == "success") {
+        this.setState({
+          selected: "NULL",
+          isChecked: false,
+          recivedby: ''
+        })
         this.props.navigation.goBack();
       }
     })
@@ -77,12 +108,31 @@ class Delivered extends React.Component {
 
   onValueChange(value: string) {
     this.setState({
-      selected: value
+      selected: value,
+
     });
   }
 
+  checkbox(clickIndex) {
+    var array = [...this.state.qty];
+    var index = array.indexOf(clickIndex)
+
+
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ qty: array, });
+    }
+    else {
+      array.push(clickIndex)
+      this.setState({ qty: array, });
+    }
+    console.log("ID", this.state.qty)
+  }
+
+
   render() {
     const { navigation, orderitem, orderdetail } = this.props;
+    var Address = orderdetail.aptNo + ',' + orderdetail.buildingName + ',' + orderdetail.areaName + ',' + orderdetail.cityName + ',' + orderdetail.zipcode + ',' + orderdetail.state
 
     return (
       <Container style={appStyles.container}>
@@ -90,11 +140,9 @@ class Delivered extends React.Component {
         <Headers
           IconLeft='arrowleft'
           onPress={() => this.openControlPanel()}
-
           bgColor='transparent'
           Title='View Order Details'
         />
-
 
         <ScrollView>
           <Card style={[appStyles.addBox, { height: 'auto' }, styles.orderBox]}>
@@ -122,14 +170,18 @@ class Delivered extends React.Component {
             <Grid style={styles.reasonView} >
               <Row style={{ height: 55 }}>
                 <Col style={{ justifyContent: 'center' }}>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => this.dialCall(orderdetail.mobileNo)}
+                    style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
                     <Icon name='call' type='Zocial' style={styles.IconStyle} />
                     <Text style={styles.IconText}>Call Customer</Text>
                   </TouchableOpacity>
                 </Col>
 
                 <Col style={{ justifyContent: 'center', }}>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + Address)}
+                    style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
                     <Icon name='location-on' type='MaterialIcons' style={styles.IconStyle} />
                     <Text style={styles.IconText}>View Map</Text>
 
@@ -161,24 +213,20 @@ class Delivered extends React.Component {
                     <View style={[styles.RigView, styles.qtyCol]}>
                       <Text style={styles.qtyText}>Qty</Text>
                       <Text style={styles.qtyInput}>{orderitems.quantity}</Text>
-                      {/* <Text
-                        style={styles.qtyInput}
-                        value={orderitems.quantity}
-                        keyboardType='numeric'
-                        maxLength={2} /> */}
                     </View>
 
                     <CheckBox
                       style={styles.checkboxStyle}
-                      onClick={() => {
-                        this.setState({
-                          isChecked: !this.state.isChecked
-                        })
-                      }}
+                      // onClick={() => {
+                      //   this.setState({
+                      //     isChecked: !this.state.isChecked
+                      //   })
+                      // }}
+                      onClick={() => this.checkbox(orderitems.id)}
                       checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
                       unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
                         style={{ color: 'transparent' }} />}
-                      isChecked={this.state.isChecked}
+                      isChecked={this.state.qty.indexOf(orderitems.id) !== -1}
                     />
                   </Right>
                 </ListItem>
@@ -192,7 +240,7 @@ class Delivered extends React.Component {
               mode="dropdown"
               iosIcon={<Icon name="arrow-dropdown-circle" style={{ color: '#fff', fontSize: 25 }} />}
               textStyle={{ color: "#fff", fontSize: 18 }}
-              style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 15, top: 10,color:'#fff', }}
+              style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 15, top: 10, color: '#fff', }}
               selectedValue={this.state.selected}
               onValueChange={this.onValueChange.bind(this)}
             >
@@ -202,6 +250,17 @@ class Delivered extends React.Component {
               <Picker.Item label="Delivered" value="DEL" />
               <Picker.Item label="Not delivered" value="NOTDEL" />
             </Picker>
+          </View>
+
+          <View style={{ marginTop: 15, marginStart: 15, borderRadius: 15, borderColor: Colors.primary, borderWidth: 1, padding: 15, marginEnd: 15, flexDirection: 'row' }}>
+            <Text>Recived by :</Text>
+            <TextInput
+              style={{ marginStart: 10, borderBottomWidth: 1, borderBottomColor: Colors.primary, width: Layout.indent * 11, top: -3 }}
+
+              placeholder="Recived by"
+              placeholderTextColor='#000'
+              autoCapitalize="none"
+              onChangeText={(text) => this.setState({ recivedby: text })} />
           </View>
 
 

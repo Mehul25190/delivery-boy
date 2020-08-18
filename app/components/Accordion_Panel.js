@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Screens, Colors, Layout, ActionTypes } from '../constants';
-import { Platform, LayoutAnimation, StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { Platform, LayoutAnimation, StyleSheet, View, Text, Linking, TouchableOpacity } from 'react-native';
 import { Icon } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import { connect } from "react-redux";
@@ -48,6 +48,26 @@ class Accordion_Panel extends Component {
 
   };
 
+  dialCall = (phone) => {
+    let phoneNumber = phone;
+    if (Platform.OS !== 'android') {
+      phoneNumber = `telprompt:${phone}`;
+    }
+    else {
+      phoneNumber = `tel:${phone}`;
+    }
+    Linking.canOpenURL(phoneNumber)
+      .then(supported => {
+        console.log(supported)
+        if (!supported) {
+          Alert.alert('Phone number is not available');
+        } else {
+          return Linking.openURL(phoneNumber);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
 
 
   render() {
@@ -71,7 +91,7 @@ class Accordion_Panel extends Component {
             <TouchableOpacity onPress={this.props.pressClick} style={{ height: this.state.updated_Height, overflow: 'hidden', paddingLeft: Layout.indent, paddingRight: Layout.indent }}>
               <View>
                 <Text style={styles.Panel_text}>Customer - {item.firstName} {item.lastName} </Text>
-                {this.props.item.bell == true ?
+                {this.props.item.ringBell == 0 ?
                   (<Icon name='bell' type='MaterialCommunityIcons' style={styles.bellIconStyle} />) :
                   (<Icon name='bell-off' type='MaterialCommunityIcons' style={styles.bellIconStyle} />)
 
@@ -81,7 +101,11 @@ class Accordion_Panel extends Component {
               <View style={{ height: 1, width: '100%', backgroundColor: Colors.primary }} />
               <View style={{ marginVertical: 10, position: 'relative' }}>
                 <Text style={styles.Panel_text}>Status &nbsp; {item.orderStatus} </Text>
-                <Icon name='call' type='MaterialIcons' style={styles.callIconStyle} />
+                <Icon 
+                name='call' 
+                type='MaterialIcons' 
+                onPress={() => this.dialCall(item.mobileNo)}
+                style={styles.callIconStyle} />
               </View>
             </TouchableOpacity>
 

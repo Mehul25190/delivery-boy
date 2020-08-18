@@ -64,6 +64,7 @@ class Home extends React.Component {
 
   onPressRecipe = item => {
     const did = this.props.user[0].id
+    console.log("ITEM ID",item.id)
     if (item.orderStatus == 'RET') {
       this.props.orderdetails(did, item.id).then(res => {
         if (res.status == "success") {
@@ -122,6 +123,7 @@ class Home extends React.Component {
                 <View style={styles.MainContainer}>
                   <ScrollView contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}>
                     {
+                      this.props.orderlistdata.length > 0 ? 
                       this.props.orderlistdata.map((item, key) =>
                         (
                           <Accordion_Panel
@@ -131,6 +133,7 @@ class Home extends React.Component {
                             pressClick={() => this.onPressRecipe(item)}
                           />
                         ))
+                        : <Text style={{fontSize:20,textAlign:'center'}}>No data found, please try again.</Text>
                     }
                     
                       <ScreenLoader loading={this.props.Loading} />

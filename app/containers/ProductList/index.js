@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ImageBackground, Image, TouchableOpacity, date, Picker, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, TouchableOpacity, Alert, Linking, TextInput, ScrollView } from 'react-native';
 import _ from 'lodash';
 import { Screens, Layout, Colors } from '../../constants';
 import { Logo, Statusbar, Headers } from '../../components';
@@ -16,11 +16,16 @@ import {
 import { connect } from "react-redux";
 import * as userActions from "../../actions/user";
 import appStyles from '../../theme/appStyles';
+import * as orderActions from "../../actions/Order";
 import styles from './styles';
 import { ReturnReason } from '../data/data';
 import CheckBox from 'react-native-check-box';
 import url from '../../config/api'
 import moment from 'moment'
+import { showToast } from '../../utils/common';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 
 class ProductList extends React.Component {
 
@@ -31,6 +36,12 @@ class ProductList extends React.Component {
       date: '',
       time: '',
       checked: true,
+      qty: '',
+      slectedProp: [],
+      folder: '',
+      itemid: '',
+      image: '',
+      imageindex: []
     };
 
   }
@@ -50,11 +61,168 @@ class ProductList extends React.Component {
       date: date + ' ' + month + ' ' + year,
       time: hours + ':' + min
     });
+    this.getPermissionAsync()
   }
   openControlPanel = () => {
     this.props.navigation.goBack(); // open drawer
   };
 
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  };
+
+  _pickImage = async (clickIndex) => {
+    Alert.alert(
+      'Select Image',
+      'Please select Image mediam for pickup.',
+      [
+        { text: 'Open Camera', onPress: () => this.Camera(clickIndex) },
+        { text: 'Open Gellary', onPress: () => this.Gellary(clickIndex) },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+    )
+  };
+
+  Camera = async (clickIndex) => {
+    let result = await ImagePicker.launchCameraAsync({
+      //launchImageLibraryAsync
+      //launchCameraAsync
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      base64: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      this.setState({ image: result.base64 });
+    }
+  }
+
+  Gellary = async (clickIndex) => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      base64: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      this.setState({ image: result.base64 });
+    }
+  }
+
+
+  checkbox(clickIndex, OrderID) {
+    var array = [...this.state.qty];
+    var index = array.indexOf(clickIndex)
+
+    this.data = {
+      'orderId': OrderID,
+      'orderItemId': this.state.folder[0],
+      'pickedQty': clickIndex,
+      'image': JSON.stringify(this.state.image),
+    }
+console.log("DATA=====>",this.data.image)
+    // if (this.state.slectedProp.indexOf(clickIndex) !== -1) {
+    //   if (index !== -1) {
+    //     array.splice(index, 1);
+    //     this.setState({ qty: array, });
+    //   }
+    //   else {
+    //     array.push(clickIndex)
+    //     this.setState({ qty: array, });
+    //     this.props.pickedOrder(this.data).then(res => {
+    //       if (res.status == "success") {
+    //       return showToast("Image is Selected","success")
+    //       }
+    //     })
+    //   }
+
+    // } else {
+    //   return showToast(" Please Enter Product Quantity", "danger")
+    // }
+  }
+
+
+  agregarFavoritos(clickIndex, val, itemsid, quantity) {
+    var array = [...this.state.slectedProp];
+    var folder = [...this.state.folder]
+    var item = [...this.state.itemid]
+
+    var index = array.indexOf(clickIndex)
+    var idindex = folder.indexOf(val)
+    var itemindex = item.indexOf(val)
+
+
+    if (val > quantity) {
+      array.splice(index, 1);
+      folder.splice(idindex, 1);
+      item.splice(itemindex, 1);
+      return showToast(" please Product Quantity", "danger")
+    }
+
+
+    if (index !== -1) {
+      array.splice(index, 1);
+      folder.splice(idindex, 1);
+      item.splice(itemindex, 1);
+
+      array.push(clickIndex)
+      folder.push(val)
+      item.push(itemsid)
+
+      this.setState({ slectedProp: array, folder: folder, itemid: item, });
+    }
+    else {
+      array.push(clickIndex)
+      folder.push(val)
+      item.push(itemsid)
+
+      this.setState({ slectedProp: array, folder: folder, itemid: item, });
+    }
+
+  }
+
+  dialCall = (phone) => {
+    let phoneNumber = phone;
+    if (Platform.OS !== 'android') {
+      phoneNumber = `telprompt:${phone}`;
+    }
+    else {
+      phoneNumber = `tel:${phone}`;
+    }
+    Linking.canOpenURL(phoneNumber)
+      .then(supported => {
+        console.log(supported)
+        if (!supported) {
+          Alert.alert('Phone number is not available');
+        } else {
+          return Linking.openURL(phoneNumber);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
+  pickedUpOrder() {
+    if (this.state.itemid < 1
+      || this.state.qty.length != this.state.itemid.length) {
+      return showToast("Please Double Check Fields", "danger")
+    }
+    this.setState({
+      itemid: '', qty: '', slectedProp: [], folder: []
+    })
+    this.props.navigation.goBack();
+  }
   dateFormate(date) {
     var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -67,8 +235,11 @@ class ProductList extends React.Component {
     this.props.navigation.navigate('Confirmation', { item });
   };
 
+
+
   render() {
     const { navigation, orderitem, orderdetail } = this.props;
+    var Address = orderdetail.aptNo + ',' + orderdetail.buildingName + ',' + orderdetail.areaName + ',' + orderdetail.cityName + ',' + orderdetail.zipcode + ',' + orderdetail.state
     return (
       <Container style={appStyles.container}>
 
@@ -98,7 +269,7 @@ class ProductList extends React.Component {
               </View>
               <View style={{ merginRight: Layout.indent, justifyContent: 'center', marginTop: 5 }}>
                 <Text style={styles.title}>{orderdetail.firstName}&nbsp;{orderdetail.lastName}</Text>
-                <Text style={styles.title}>{orderdetail.aptNo},{orderdetail.buildingName},{orderdetail.areaName},{orderdetail.cityName},{orderdetail.zipcode},{orderdetail.state} </Text>
+                <Text style={styles.title}>{Address} </Text>
                 <Text style={styles.title}>{orderdetail.mobileNo}</Text>
 
 
@@ -107,14 +278,20 @@ class ProductList extends React.Component {
             <Grid style={styles.reasonView} >
               <Row style={{ height: 55 }}>
                 <Col style={{ justifyContent: 'center' }}>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => this.dialCall(orderdetail.mobileNo)}
+                    style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
                     <Icon name='call' type='Zocial' style={styles.IconStyle} />
                     <Text style={styles.IconText}>Call Customer</Text>
                   </TouchableOpacity>
                 </Col>
 
                 <Col style={{ justifyContent: 'center', }}>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
+                  <TouchableOpacity
+
+                    onPress={() => Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + Address)}
+                    
+                    style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
                     <Icon name='location-on' type='MaterialIcons' style={styles.IconStyle} />
                     <Text style={styles.IconText}>View Map</Text>
 
@@ -123,8 +300,7 @@ class ProductList extends React.Component {
               </Row>
 
             </Grid>
-            {orderitem.map((orderitems, key) => (
-
+            {orderitem.map((orderitems, index) => (
               <View style={{ paddingLeft: Layout.indent - 10, paddingRight: Layout.indent - 5 }}>
                 <ListItem icon style={styles.ListItems} noBorder>
                   <Left>
@@ -134,18 +310,22 @@ class ProductList extends React.Component {
                     />
                   </Left>
                   <Body style={styles.bodyText}>
-                    <Text numberOfLines={1} style={styles.proTitle}>{orderitems.itemName}</Text>
+                    <Text numberOfLines={2} ellipsizeMode='tail' style={styles.proTitle}>{orderitems.itemName} X {orderitems.quantity}</Text>
 
                     {/* <Text style={styles.proTime}>{getItem.time}</Text> */}
                   </Body>
                   <Right style={styles.ListRight}>
-                    <View style={styles.RigView}>
+                    <TouchableOpacity
+                      onPress={() => this._pickImage(orderitems.itemId)}
+                      style={styles.RigView}>
                       <Icon name='camera' type='FontAwesome' style={styles.camera} />
-                    </View>
+                    </TouchableOpacity>
 
                     <View style={[styles.RigView, styles.qtyCol]}>
                       <Text style={styles.qtyText}>Qty</Text>
                       <TextInput
+                        value={this.state.folder == '' ? '' : this.state.folder}
+                        onChangeText={(text) => this.agregarFavoritos(index + 1, text, orderitems.itemId, orderitems.quantity)}
                         style={styles.qtyInput}
                         keyboardType='numeric'
                         maxLength={2} />
@@ -153,52 +333,14 @@ class ProductList extends React.Component {
 
                     <CheckBox
                       style={styles.checkboxStyle}
-                      onClick={() => {
-                        this.setState({
-                          isChecked: !this.state.isChecked
-                        })
-                      }}
+                      onClick={() => this.checkbox(orderitems.itemId, orderdetail.orderNumber)}
                       checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
                       unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
                         style={{ color: 'transparent' }} />}
-                      isChecked={this.state.isChecked}
+                      isChecked={this.state.qty.indexOf(orderitems.itemId) !== -1}
                     />
                   </Right>
                 </ListItem>
-                {/*   <ListItem icon style={styles.ListItems} noBorder>
-                <Left>
-                  <Image style={styles.proImage} source={orderitems.imagePath} />
-                </Left>
-                <Body style={styles.bodyText}>
-                  <Text numberOfLines={1} style={styles.proTitle}>{orderitems.itemName}</Text>
-                   <Text style={styles.proTime}>{orderitems.time}</Text> 
-                </Body>
-                <Right style={styles.ListRight}>
-                  <View style={styles.RigView}>
-                    <Icon name='camera' type='FontAwesome' style={styles.camera} />
-                  </View>
-                  <View style={[styles.RigView, styles.qtyCol]}>
-                    <Text style={styles.qtyText}>Qty</Text>
-
-                    <TextInput style={styles.qtyInput}
-                      keyboardType='numeric'
-                      maxLength={2} value={10} />
-                  </View>
-
-                  <CheckBox
-                    style={styles.checkboxStyle}
-                    onClick={() => {
-                      this.setState({
-                        Checked: !this.state.Checked
-                      })
-                    }}
-                    checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
-                    unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons' style={{ color: 'transparent' }} />}
-                    isChecked={this.state.Checked}
-                  />
-                </Right>
-              </ListItem>
-              */}
               </View>
             ))}
           </Card>
@@ -206,7 +348,8 @@ class ProductList extends React.Component {
         </ScrollView>
         <View style={styles.doneBtnArea}>
           <Button priamary full style={styles.doneBtn}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.pickedUpOrder(orderdetail.orderNumber)}>
               <Text style={styles.btnTextDone}>Picked</Text>
             </TouchableOpacity>
           </Button>
@@ -227,6 +370,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(userActions.logoutUser()),
+    pickedOrder: (data) => dispatch(orderActions.pickedOrder(data)),
   };
 };
 

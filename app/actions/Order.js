@@ -106,7 +106,30 @@ export const updatestatus = payloads => dispatch => {
             //showToast(error.message, "danger")
         });
 }
-
+export const pickedOrder = payloads => dispatch => {
+    dispatch({ type: ActionTypes.LOADING, isLoading: true });
+    return axios.post(url.pickedOrder, { payloads: payloads })
+        .then(res => {
+            dispatch({ type: ActionTypes.LOADING, isLoading: false });
+            if (res.status == 200) {
+                if (res.data.status == "success") {
+                    dispatch({ type: ActionTypes.PICKUPORDER, data: res.data.data });
+                    return res.data
+                }
+                else {
+                    showToast(res.data.message, "danger")
+                    return res.data
+                }
+            } else {
+                showToast(res.data.message, "danger")
+                return res
+            }
+        }).catch(function (error) {
+            dispatch({ type: ActionTypes.LOADING, isLoading: false });
+            console.log(url.pickedOrder, error.message)
+            //showToast(error.message, "danger")
+        });
+}
 
 
 

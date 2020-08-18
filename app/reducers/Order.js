@@ -30,6 +30,12 @@ const order = (state = initialState.auth, action) => {
                 updatestatus: action.data,
             }
         }
+        case ActionTypes.PICKUPORDER: {
+            return {
+                ...state,                
+                pickedOrder: action.data,
+            }
+        }
 
         // Default
         default: {

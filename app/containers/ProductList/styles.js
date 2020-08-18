@@ -109,7 +109,7 @@ alignItems:'flex-end'
  },
 
  proTitle:{
- 
+ marginRight:30,
   fontSize:16,
   fontFamily:'Font-Medium'
  },
