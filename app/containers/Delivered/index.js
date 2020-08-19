@@ -89,8 +89,7 @@ class Delivered extends React.Component {
 
 
   onPressSubmit(id) {
-    var length = this.state.qty.length
-    if (length == '0' || this.state.recivedby == '' || this.state.selected == 'NULL') {
+    if (this.state.recivedby == '' || this.state.selected == 'NULL') {
       return showToast("Please Double Check All Field", "danger")
     }
     this.props.updatestatus(id, this.state.selected, this.state.recivedby).then(res => {
@@ -112,23 +111,6 @@ class Delivered extends React.Component {
 
     });
   }
-
-  checkbox(clickIndex) {
-    var array = [...this.state.qty];
-    var index = array.indexOf(clickIndex)
-
-
-    if (index !== -1) {
-      array.splice(index, 1);
-      this.setState({ qty: array, });
-    }
-    else {
-      array.push(clickIndex)
-      this.setState({ qty: array, });
-    }
-    console.log("ID", this.state.qty)
-  }
-
 
   render() {
     const { navigation, orderitem, orderdetail } = this.props;
@@ -203,55 +185,44 @@ class Delivered extends React.Component {
                   <Body style={styles.bodyText}>
                     <Text numberOfLines={1} style={styles.proTitle}>{orderitems.itemName}</Text>
 
-                    {/* <Text style={styles.proTime}>{getItem.time}</Text> */}
+
                   </Body>
                   <Right style={styles.ListRight}>
-                    {/* <View style={styles.RigView}>
-                      <Icon name='camera' type='FontAwesome' style={styles.camera} />
-                    </View> */}
+
 
                     <View style={[styles.RigView, styles.qtyCol]}>
                       <Text style={styles.qtyText}>Qty</Text>
                       <Text style={styles.qtyInput}>{orderitems.quantity}</Text>
                     </View>
 
-                    <CheckBox
-                      style={styles.checkboxStyle}
-                      // onClick={() => {
-                      //   this.setState({
-                      //     isChecked: !this.state.isChecked
-                      //   })
-                      // }}
-                      onClick={() => this.checkbox(orderitems.id)}
-                      checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
-                      unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
-                        style={{ color: 'transparent' }} />}
-                      isChecked={this.state.qty.indexOf(orderitems.id) !== -1}
-                    />
+
                   </Right>
                 </ListItem>
               </View>
             ))}
           </Card>
 
-          <View>
-            <Picker
-              headerStyle={{ backgroundColor: Colors.primary }}
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-dropdown-circle" style={{ color: '#fff', fontSize: 25 }} />}
-              textStyle={{ color: "#fff", fontSize: 18 }}
-              style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 15, top: 10, color: '#fff', }}
-              selectedValue={this.state.selected}
-              onValueChange={this.onValueChange.bind(this)}
-            >
-              <Picker.Item label="Select Status" value="NULL" />
-              <Picker.Item label="In Progress" value="INP" />
-              <Picker.Item label="Assign back to admin" value="ASGNBACK" />
-              <Picker.Item label="Delivered" value="DEL" />
-              <Picker.Item label="Not delivered" value="NOTDEL" />
-            </Picker>
-          </View>
-
+          {
+            this.state.selected == 'DEL' ?
+              <View>
+                <Picker
+                  headerStyle={{ backgroundColor: Colors.primary }}
+                  mode="dropdown"
+                  iosIcon={<Icon name="arrow-dropdown-circle" style={{ color: '#fff', fontSize: 25 }} />}
+                  textStyle={{ color: "#fff", fontSize: 18 }}
+                  style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 15, top: 10, color: '#fff', }}
+                  selectedValue={this.state.selected}
+                  onValueChange={this.onValueChange.bind(this)}
+                >
+                  <Picker.Item label="Select Status" value="NULL" />
+                  <Picker.Item label="In Progress" value="INP" />
+                  <Picker.Item label="Assign back to admin" value="ASGNBACK" />
+                  <Picker.Item label="Delivered" value="DEL" />
+                  <Picker.Item label="Not delivered" value="NOTDEL" />
+                </Picker>
+              </View>
+              : null
+          }
           <View style={{ marginTop: 15, marginStart: 15, borderRadius: 15, borderColor: Colors.primary, borderWidth: 1, padding: 15, marginEnd: 15, flexDirection: 'row' }}>
             <Text>Recived by :</Text>
             <TextInput
@@ -265,13 +236,6 @@ class Delivered extends React.Component {
 
 
         </ScrollView>
-        {/* <View style={styles.doneBtnArea}>
-          <Button priamary full style={styles.doneBtn}>
-            <TouchableOpacity onPress={() => this.onPressSubmit('OrderReturnDetail')}>
-              <Text style={styles.btnTextDone}>Save</Text>
-            </TouchableOpacity>
-          </Button>
-        </View> */}
         <View style={styles.doneBtnArea}>
           <Button priamary full style={styles.doneBtn}>
             <TouchableOpacity onPress={() => this.onPressSubmit(orderdetail.id)}>

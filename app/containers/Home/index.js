@@ -37,13 +37,13 @@ class Home extends React.Component {
     };
   }
   componentWillMount() {
-    this.props.orderlist(this.props.user[0].id,)
+    this.props.orderlist(this.props.user[0].id)
     if (this.props.user == null) {
       this.props.navigation.navigate(Screens.SignInStack.route)
     }
   }
   componentDidMount() {
-    this.props.orderlist(this.props.user[0].id,)
+    this.props.orderlist(this.props.user[0].id)
     if (this.props.user == null) {
       this.props.navigation.navigate(Screens.SignInStack.route)
     }
@@ -64,21 +64,21 @@ class Home extends React.Component {
 
   onPressRecipe = item => {
     const did = this.props.user[0].id
-    console.log("ITEM ID",item.id)
+    console.log("ITEM ID", item.id)
     if (item.orderStatus == 'RET') {
       this.props.orderdetails(did, item.id).then(res => {
         if (res.status == "success") {
-         this.props.navigation.navigate('ProductList');
+          this.props.navigation.navigate('ProductList');
         }
       })
     }
     // else if (item.orderStatus == 'PEN' || item.orderStatus == 'DEL') {
     //   this.props.navigation.navigate('Delivered');
     // }
-    else{
+    else {
       this.props.orderdetails(did, item.id).then(res => {
         if (res.status == "success") {
-         this.props.navigation.navigate('Delivered');
+          this.props.navigation.navigate('Delivered');
         }
       })
     }
@@ -123,21 +123,21 @@ class Home extends React.Component {
                 <View style={styles.MainContainer}>
                   <ScrollView contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}>
                     {
-                      this.props.orderlistdata.length > 0 ? 
-                      this.props.orderlistdata.map((item, key) =>
-                        (
-                          <Accordion_Panel
-                            key={key}
-                            onClickFunction={this.update_Layout.bind(this, key)}
-                            item={item}
-                            pressClick={() => this.onPressRecipe(item)}
-                          />
-                        ))
-                        : <Text style={{fontSize:20,textAlign:'center'}}>No data found, please try again.</Text>
+                      this.props.orderlistdata.length > 0 ?
+                        this.props.orderlistdata.map((item, key) =>
+                          (
+                            <Accordion_Panel
+                              key={key}
+                              onClickFunction={this.update_Layout.bind(this, key)}
+                              item={item}
+                              pressClick={() => this.onPressRecipe(item)}
+                            />
+                          ))
+                        : <Text style={{ fontSize: 20, textAlign: 'center' }}>No data found, please try again.</Text>
                     }
-                    
-                      <ScreenLoader loading={this.props.Loading} />
-                    
+
+                    <ScreenLoader loading={this.props.Loading} />
+
 
                   </ScrollView>
                 </View> : null
@@ -164,8 +164,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(userActions.logoutUser()),
     Updatedata: (Search) => dispatch({ type: ActionTypes.ORDERLIST, data: Search }),
-    orderlist: (id) => dispatch(orderActions.Satrtorderlist({
+    orderlist: (id) => dispatch(orderActions.orderlist({
       'deliveryBoyId': id,
+      'orderStatus': 'CNF'
     })),
     orderdetails: (did, id) => dispatch(orderActions.orderdetails({
       'deliveryBoyId': did,

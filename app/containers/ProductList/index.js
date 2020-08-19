@@ -104,7 +104,7 @@ class ProductList extends React.Component {
       quality: 1,
     });
     if (!result.cancelled) {
-      this.setState({ image: result.base64 });
+      this.ValidateSize(result.base64)
     }
   }
 
@@ -117,44 +117,58 @@ class ProductList extends React.Component {
       quality: 1,
     });
     if (!result.cancelled) {
-      this.setState({ image: result.base64 });
+      this.ValidateSize(result.base64)
+    }
+  }
+  ValidateSize(file) {
+    const File = file.length
+    const size = Math.round((File / 1024))
+    if (file > 2048) {
+      alert(
+        "File too small, please select a file greater than 2mb");
+    } else {
+      this.setState({ image: file });
     }
   }
 
 
-  checkbox(clickIndex, OrderID) {
+  checkbox(clickIndex, OrderID, Name) {
+
+    const { folder, image } = this.state
     var array = [...this.state.qty];
     var index = array.indexOf(clickIndex)
 
     this.data = {
       'orderId': OrderID,
-      'orderItemId': this.state.folder[0],
-      'pickedQty': clickIndex,
-      'image': JSON.stringify(this.state.image),
+      'orderItemId': clickIndex,
+      'pickedQty': this.state.folder[0],
+      'image': JSON.stringify(image),
     }
-console.log("DATA=====>",this.data.image)
-    // if (this.state.slectedProp.indexOf(clickIndex) !== -1) {
-    //   if (index !== -1) {
-    //     array.splice(index, 1);
-    //     this.setState({ qty: array, });
-    //   }
-    //   else {
-    //     array.push(clickIndex)
-    //     this.setState({ qty: array, });
-    //     this.props.pickedOrder(this.data).then(res => {
-    //       if (res.status == "success") {
-    //       return showToast("Image is Selected","success")
-    //       }
-    //     })
-    //   }
 
-    // } else {
-    //   return showToast(" Please Enter Product Quantity", "danger")
-    // }
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ qty: array, });
+    }
+    else {
+      if (folder.length > 0) {
+        array.push(clickIndex)
+        this.setState({ qty: array, });
+        this.props.pickedOrder(this.data).then(res => {
+          if (res.status == "success") {
+            this.setState({ image: '' })
+            return showToast(Name + " is Picked-Up", "success")
+          }
+        })
+      } else {
+        showToast("Please Add Qty", "danger")
+      }
+    }
+
   }
 
 
   agregarFavoritos(clickIndex, val, itemsid, quantity) {
+
     var array = [...this.state.slectedProp];
     var folder = [...this.state.folder]
     var item = [...this.state.itemid]
@@ -163,7 +177,6 @@ console.log("DATA=====>",this.data.image)
     var idindex = folder.indexOf(val)
     var itemindex = item.indexOf(val)
 
-
     if (val > quantity) {
       array.splice(index, 1);
       folder.splice(idindex, 1);
@@ -171,6 +184,12 @@ console.log("DATA=====>",this.data.image)
       return showToast(" please Product Quantity", "danger")
     }
 
+    if (val == '') {
+      var checkbox = [...this.state.qty];
+      var index = checkbox.indexOf(itemsid)
+      checkbox.splice(index, 1);
+      this.setState({ qty: checkbox, });
+    }
 
     if (index !== -1) {
       array.splice(index, 1);
@@ -290,7 +309,7 @@ console.log("DATA=====>",this.data.image)
                   <TouchableOpacity
 
                     onPress={() => Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + Address)}
-                    
+
                     style={{ justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'row' }}>
                     <Icon name='location-on' type='MaterialIcons' style={styles.IconStyle} />
                     <Text style={styles.IconText}>View Map</Text>
@@ -333,7 +352,7 @@ console.log("DATA=====>",this.data.image)
 
                     <CheckBox
                       style={styles.checkboxStyle}
-                      onClick={() => this.checkbox(orderitems.itemId, orderdetail.orderNumber)}
+                      onClick={() => this.checkbox(orderitems.itemId, orderdetail.orderNumber, orderitems.itemName)}
                       checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
                       unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
                         style={{ color: 'transparent' }} />}
