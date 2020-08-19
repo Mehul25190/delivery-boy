@@ -202,39 +202,40 @@ class Delivered extends React.Component {
             ))}
           </Card>
 
-          {
-            this.state.selected == 'DEL' ?
-              <View>
-                <Picker
-                  headerStyle={{ backgroundColor: Colors.primary }}
-                  mode="dropdown"
-                  iosIcon={<Icon name="arrow-dropdown-circle" style={{ color: '#fff', fontSize: 25 }} />}
-                  textStyle={{ color: "#fff", fontSize: 18 }}
-                  style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 15, top: 10, color: '#fff', }}
-                  selectedValue={this.state.selected}
-                  onValueChange={this.onValueChange.bind(this)}
-                >
-                  <Picker.Item label="Select Status" value="NULL" />
-                  <Picker.Item label="In Progress" value="INP" />
-                  <Picker.Item label="Assign back to admin" value="ASGNBACK" />
-                  <Picker.Item label="Delivered" value="DEL" />
-                  <Picker.Item label="Not delivered" value="NOTDEL" />
-                </Picker>
-              </View>
-              : null
-          }
-          <View style={{ marginTop: 15, marginStart: 15, borderRadius: 15, borderColor: Colors.primary, borderWidth: 1, padding: 15, marginEnd: 15, flexDirection: 'row' }}>
-            <Text>Recived by :</Text>
-            <TextInput
-              style={{ marginStart: 10, borderBottomWidth: 1, borderBottomColor: Colors.primary, width: Layout.indent * 11, top: -3 }}
 
-              placeholder="Recived by"
-              placeholderTextColor='#000'
-              autoCapitalize="none"
-              onChangeText={(text) => this.setState({ recivedby: text })} />
+          <View>
+            <Picker
+              headerStyle={{ backgroundColor: Colors.primary }}
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-dropdown-circle" style={{ color: '#fff', fontSize: 25 }} />}
+              textStyle={{ color: "#fff", fontSize: 18 }}
+              style={{ backgroundColor: Colors.primary, marginLeft: 10, marginRight: 10, borderRadius: 15, top: 10, color: '#fff', }}
+              selectedValue={this.state.selected}
+              onValueChange={this.onValueChange.bind(this)}
+            >
+              <Picker.Item label="Select Status" value="NULL" />
+              <Picker.Item label="In Progress" value="INP" />
+              <Picker.Item label="Assign back to admin" value="ASGNBACK" />
+              <Picker.Item label="Delivered" value="DEL" />
+              <Picker.Item label="Not delivered" value="NOTDEL" />
+            </Picker>
           </View>
 
+          {
+            this.state.selected == 'DEL' ?
+              <View style={{ marginTop: 15, marginStart: 15, borderRadius: 15, borderColor: Colors.primary, borderWidth: 1, padding: 15, marginEnd: 15, flexDirection: 'row' }}>
+                <Text>Recived by :</Text>
+                <TextInput
+                  style={{ marginStart: 10, borderBottomWidth: 1, borderBottomColor: Colors.primary, width: Layout.indent * 11, top: -3 }}
 
+                  placeholder="Recived by"
+                  placeholderTextColor='#000'
+                  autoCapitalize="none"
+                  onChangeText={(text) => this.setState({ recivedby: text })} />
+              </View>
+
+              : null
+          }
         </ScrollView>
         <View style={styles.doneBtnArea}>
           <Button priamary full style={styles.doneBtn}>
