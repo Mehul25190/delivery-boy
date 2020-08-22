@@ -72,10 +72,14 @@ class Accordion_Panel extends Component {
 
   render() {
     const { item } = this.props
+    console.log("ITEM", item.orderNumber)
     return (
 
       <View style={styles.Panel_Holder}>
-        <TouchableOpacity activeOpacity={0.7} onPress={this.props.onClickFunction} style={this.state.expanded == true ? styles.Btn : styles.btnWhite}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={this.props.onClickFunction}
+          style={this.state.expanded == true ? styles.Btn : styles.btnWhite}>
 
           <Text style={this.state.expanded == true ? styles.Panel_Button_Text : styles.Panel_Button_gray}>Order Id - {this.props.item.orderNumber} </Text>
           {this.state.expanded == true ?
@@ -86,30 +90,30 @@ class Accordion_Panel extends Component {
 
         </TouchableOpacity>
 
-       
 
-            <TouchableOpacity onPress={this.props.pressClick} style={{ height: this.state.updated_Height, overflow: 'hidden', paddingLeft: Layout.indent, paddingRight: Layout.indent }}>
-              <View>
-                <Text style={styles.Panel_text}>Customer - {item.firstName} {item.lastName} </Text>
-                {this.props.item.ringBell == 0 ?
-                  (<Icon name='bell' type='MaterialCommunityIcons' style={styles.bellIconStyle} />) :
-                  (<Icon name='bell-off' type='MaterialCommunityIcons' style={styles.bellIconStyle} />)
 
-                }
-              </View>
-              <Text style={[styles.Panel_text, { marginBottom: 10 }]}>{this.props.key}Location - {item.aptNo},{item.buildingName},{item.areaName},{item.cityName},{item.zipcode},{item.state} </Text>
-              <View style={{ height: 1, width: '100%', backgroundColor: Colors.primary }} />
-              <View style={{ marginVertical: 10, position: 'relative' }}>
-                <Text style={styles.Panel_text}>Status &nbsp; {item.orderStatus} </Text>
-                <Icon 
-                name='call' 
-                type='MaterialIcons' 
-                onPress={() => this.dialCall(item.mobileNo)}
-                style={styles.callIconStyle} />
-              </View>
-            </TouchableOpacity>
+        <TouchableOpacity onPress={this.props.pressClick} style={{ height: this.state.updated_Height, overflow: 'hidden', paddingLeft: Layout.indent, paddingRight: Layout.indent }}>
+          <View>
+            <Text style={styles.Panel_text}>Customer - {item.firstName} {item.lastName} </Text>
+            {this.props.item.ringBell == 0 ?
+              (<Icon name='bell' type='MaterialCommunityIcons' style={styles.bellIconStyle} />) :
+              (<Icon name='bell-off' type='MaterialCommunityIcons' style={styles.bellIconStyle} />)
 
-        
+            }
+          </View>
+          <Text style={[styles.Panel_text, { marginBottom: 10 }]}>{this.props.key}Location - {item.aptNo},{item.buildingName},{item.areaName},{item.cityName},{item.zipcode},{item.state} </Text>
+          <View style={{ height: 1, width: '100%', backgroundColor: Colors.primary }} />
+          <View style={{ marginVertical: 10, position: 'relative' }}>
+            <Text style={styles.Panel_text}>Status &nbsp; {item.orderStatus}</Text>
+            <Icon
+              name='call'
+              type='MaterialIcons'
+              onPress={() => this.dialCall(item.mobileNo)}
+              style={styles.callIconStyle} />
+          </View>
+        </TouchableOpacity>
+
+
       </View>
 
     );

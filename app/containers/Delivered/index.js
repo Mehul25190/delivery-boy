@@ -88,19 +88,30 @@ class Delivered extends React.Component {
   };
 
 
-  onPressSubmit(id) {
-    if (this.state.recivedby == '' || this.state.selected == 'NULL') {
-      return showToast("Please Double Check All Field", "danger")
+  onPressSubmit(id, status) {
+    if (this.state.selected == 'NULL') {
+      return showToast("Please Select Status Field", "danger")
+    }
+    if (this.state.selected == 'DEL') {
+      if (this.state.recivedby == '') {
+        return showToast("Please Select Recived by", "danger")
+      }
     }
     this.props.updatestatus(id, this.state.selected, this.state.recivedby).then(res => {
-      console.log("RES", res)
       if (res.status == "success") {
-        this.setState({
-          selected: "NULL",
-          isChecked: false,
-          recivedby: ''
+
+        this.props.orderlist(this.props.user[0].id, status).then(res => {
+
+          if (res.status == "success") {
+            this.props.navigation.goBack()
+            this.setState({
+              selected: "NULL",
+              isChecked: false,
+              recivedby: ''
+            })
+
+          }
         })
-        this.props.navigation.goBack();
       }
     })
   };
@@ -131,7 +142,7 @@ class Delivered extends React.Component {
             <View style={{ paddingLeft: 10, paddingTop: 10 }}>
               <View style={styles.orderInfo}>
                 <Text style={styles.orderId}>
-                  Order ID - {orderdetail.orderNumber}
+                  Order ID - {orderdetail.orderNumber}{orderdetail.orderStatus}
                 </Text>
                 <Text style={styles.Qty}>
                   {orderdetail.itemCount} Items
@@ -214,7 +225,7 @@ class Delivered extends React.Component {
               onValueChange={this.onValueChange.bind(this)}
             >
               <Picker.Item label="Select Status" value="NULL" />
-              <Picker.Item label="In Progress" value="INP" />
+              <Picker.Item label="In Process" value="INP" />
               <Picker.Item label="Assign back to admin" value="ASGNBACK" />
               <Picker.Item label="Delivered" value="DEL" />
               <Picker.Item label="Not delivered" value="NOTDEL" />
@@ -239,7 +250,7 @@ class Delivered extends React.Component {
         </ScrollView>
         <View style={styles.doneBtnArea}>
           <Button priamary full style={styles.doneBtn}>
-            <TouchableOpacity onPress={() => this.onPressSubmit(orderdetail.id)}>
+            <TouchableOpacity onPress={() => this.onPressSubmit(orderdetail.id, orderdetail.orderStatus)}>
               <Text style={styles.btnTextDone}>Save</Text>
             </TouchableOpacity>
           </Button>
@@ -264,6 +275,10 @@ const mapDispatchToProps = (dispatch) => {
     updatestatus: (id, status) => dispatch(orderActions.updatestatus({
       'orderId': id,
       'status': status,
+    })),
+    orderlist: (id, status) => dispatch(orderActions.orderlist({
+      'deliveryBoyId': id,
+      'orderStatus': status,
     })),
   };
 };

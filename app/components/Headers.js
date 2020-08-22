@@ -54,6 +54,7 @@ class Headers extends React.Component {
     this.setState({ filter: !this.state.filter });
   };
   orderlist(val, status) {
+    global.text = val
     this.setState({ checked: status })
     this.props.orderlist(this.props.user[0].id, status)
   }
@@ -113,7 +114,7 @@ class Headers extends React.Component {
               <MenuOptions style={{ backgroundColor: '#D2EAD2', borderRadius: 5 }}>
 
 
-                <CheckedOption checked={checked == 'PEN'} value={'PEN'} text='In Process' />
+                <CheckedOption checked={checked == 'INP'} value={'INP'} text='In Process' />
                 <CheckedOption checked={checked == 'CNF'} value={'CNF'} text='Assigned to me' />
                 <CheckedOption checked={checked == 'DEL'} value={'DEL'} text='Delivered' />
                 <CheckedOption checked={checked == 'RET'} value={'RET'} text='Return' />
@@ -178,9 +179,6 @@ const mapDispatchToProps = (dispatch) => {
     orderlist: (id, status) => dispatch(orderActions.orderlist({
       'deliveryBoyId': id,
       'orderStatus': status,
-    })),
-    Satrtorderlist: (id) => dispatch(orderActions.Satrtorderlist({
-      'deliveryBoyId': id,
     })),
     Updatedata: (Search) => dispatch({ type: ActionTypes.ORDERLIST, data: Search }),
   };

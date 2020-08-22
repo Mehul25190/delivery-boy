@@ -72,15 +72,15 @@ class Home extends React.Component {
         }
       })
     }
-    // else if (item.orderStatus == 'PEN' || item.orderStatus == 'DEL') {
-    //   this.props.navigation.navigate('Delivered');
-    // }
     else {
-      this.props.orderdetails(did, item.id).then(res => {
-        if (res.status == "success") {
-          this.props.navigation.navigate('Delivered');
-        }
-      })
+      if(item.orderStatus == 'DEL'){
+      }else{
+        this.props.orderdetails(did, item.id).then(res => {
+          if (res.status == "success") {
+            this.props.navigation.navigate('Delivered');
+          }
+        })
+      }      
     }
 
   };
@@ -101,6 +101,7 @@ class Home extends React.Component {
 
 
   render() {
+    console.log("This props", this.props)
 
     return (
       <MenuProvider customStyles={appStyles.containerProvider} >
@@ -118,6 +119,7 @@ class Home extends React.Component {
           />
 
           <Content enableOnAndroid style={[appStyles.content, { zIndex: -1 }]}>
+            <Text style={{ marginStart: 30, fontSize: 18, fontWeight: '800', color: Colors.primary }}>{global.text == undefined ? 'Assign to me Orders' : global.text + ' Orders'} </Text>
             {
               this.props.orderlistdata ?
                 <View style={styles.MainContainer}>

@@ -12,6 +12,7 @@ export const orderlist = payloads => dispatch => {
             dispatch({ type: ActionTypes.LOADING, isLoading: false });
             if (res.status == 200) {
                 if (res.data.status == "success") {
+                    dispatch({ type: ActionTypes.ORDERLIST,});
                     dispatch({ type: ActionTypes.ORDERLIST, data: res.data.data.orderList });
                     return res.data
                 }
@@ -65,6 +66,7 @@ export const orderdetails = payloads => dispatch => {
 
                     dispatch({ type: ActionTypes.ORDERDETAILS, data: res.data.data.orderDetails });
                     dispatch({ type: ActionTypes.ORDERITEMS, data: res.data.data.orderItems });
+
                     return res.data
                 }
                 else {

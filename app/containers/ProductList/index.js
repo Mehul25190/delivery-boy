@@ -144,13 +144,14 @@ class ProductList extends React.Component {
       'pickedQty': this.state.folder[0],
       'image': JSON.stringify(image),
     }
-
+    console.log("THIS=======>", this.data)
     if (index !== -1) {
       array.splice(index, 1);
       this.setState({ qty: array, });
     }
     else {
-      if (folder.length > 0) {
+      if (this.state.folder[0] != undefined)  {
+        console.log("ZERO",folder.length)
         array.push(clickIndex)
         this.setState({ qty: array, });
         this.props.pickedOrder(this.data).then(res => {
@@ -162,6 +163,7 @@ class ProductList extends React.Component {
       } else {
         showToast("Please Add Qty", "danger")
       }
+      
     }
 
   }
@@ -181,7 +183,7 @@ class ProductList extends React.Component {
       array.splice(index, 1);
       folder.splice(idindex, 1);
       item.splice(itemindex, 1);
-      return showToast(" please Product Quantity", "danger")
+      return showToast(" Please verify ordered quantity", "danger")
     }
 
     if (val == '') {
@@ -258,6 +260,7 @@ class ProductList extends React.Component {
 
   render() {
     const { navigation, orderitem, orderdetail } = this.props;
+    console.log("STATUS", orderdetail.itemStatus)
     var Address = orderdetail.aptNo + ',' + orderdetail.buildingName + ',' + orderdetail.areaName + ',' + orderdetail.cityName + ',' + orderdetail.zipcode + ',' + orderdetail.state
     return (
       <Container style={appStyles.container}>
@@ -329,50 +332,53 @@ class ProductList extends React.Component {
                     />
                   </Left>
                   <Body style={styles.bodyText}>
-                    <Text numberOfLines={2} ellipsizeMode='tail' style={styles.proTitle}>{orderitems.itemName} X {orderitems.quantity}</Text>
-
-                    {/* <Text style={styles.proTime}>{getItem.time}</Text> */}
+                    <Text numberOfLines={2} ellipsizeMode='tail' style={styles.proTitle}>{orderitems.itemName}  {orderitems.quantity}x </Text>
                   </Body>
-                  <Right style={styles.ListRight}>
-                    <TouchableOpacity
-                      onPress={() => this._pickImage(orderitems.itemId)}
-                      style={styles.RigView}>
-                      <Icon name='camera' type='FontAwesome' style={styles.camera} />
-                    </TouchableOpacity>
+                  {
+                    orderitems.itemStatus == 'PICKED'
+                      ? <Text note>PICKED </Text> :
+                      <Right style={styles.ListRight}>
+                        <TouchableOpacity                          
+                          onPress={() => this._pickImage(orderitems.itemId)}
+                          style={styles.RigView}>
+                          <Icon name='camera' type='FontAwesome' style={styles.camera} />
+                        </TouchableOpacity>
 
-                    <View style={[styles.RigView, styles.qtyCol]}>
-                      <Text style={styles.qtyText}>Qty</Text>
-                      <TextInput
-                        value={this.state.folder == '' ? '' : this.state.folder}
-                        onChangeText={(text) => this.agregarFavoritos(index + 1, text, orderitems.itemId, orderitems.quantity)}
-                        style={styles.qtyInput}
-                        keyboardType='numeric'
-                        maxLength={2} />
-                    </View>
+                        <View style={[styles.RigView, styles.qtyCol]}>
+                          <Text style={styles.qtyText}>Qty</Text>
+                          <TextInput                           
+                            value={this.state.folder == '' ? '' : this.state.folder}
+                            onChangeText={(text) => this.agregarFavoritos(index + 1, text, orderitems.itemId, orderitems.quantity)}
+                            style={styles.qtyInput}
+                            keyboardType='numeric'
+                            maxLength={2} />
+                        </View>
 
-                    <CheckBox
-                      style={styles.checkboxStyle}
-                      onClick={() => this.checkbox(orderitems.itemId, orderdetail.orderNumber, orderitems.itemName)}
-                      checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
-                      unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
-                        style={{ color: 'transparent' }} />}
-                      isChecked={this.state.qty.indexOf(orderitems.itemId) !== -1}
-                    />
-                  </Right>
+                        <CheckBox          
+                          style={styles.checkboxStyle}
+                          onClick={() => this.checkbox(orderitems.itemId, orderitems.id, orderitems.itemName)}
+                          checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
+                          unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
+                            style={{ color: 'transparent' }} />}
+                          isChecked={this.state.qty.indexOf(orderitems.itemId) !== -1}
+                        />
+                      </Right>
+                  }
+
                 </ListItem>
               </View>
             ))}
           </Card>
 
         </ScrollView>
-        <View style={styles.doneBtnArea}>
+        {/* <View style={styles.doneBtnArea}>
           <Button priamary full style={styles.doneBtn}>
             <TouchableOpacity
               onPress={() => this.pickedUpOrder(orderdetail.orderNumber)}>
               <Text style={styles.btnTextDone}>Picked</Text>
             </TouchableOpacity>
           </Button>
-        </View>
+        </View> */}
       </Container>
 
     );
