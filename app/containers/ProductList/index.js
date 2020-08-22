@@ -323,7 +323,9 @@ class ProductList extends React.Component {
 
             </Grid>
             {orderitem.map((orderitems, index) => (
-              <View style={{ paddingLeft: Layout.indent - 10, paddingRight: Layout.indent - 5 }}>
+              <View>
+              {orderitems.itemStatus == 'RET' ? 
+              (<View style={{ paddingLeft: Layout.indent - 10, paddingRight: Layout.indent - 5 }}>
                 <ListItem icon style={styles.ListItems} noBorder>
                   <Left>
                     <Image
@@ -366,6 +368,7 @@ class ProductList extends React.Component {
                   }
 
                 </ListItem>
+              </View>) : null }
               </View>
             ))}
           </Card>
