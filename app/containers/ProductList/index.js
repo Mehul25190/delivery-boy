@@ -356,7 +356,7 @@ class ProductList extends React.Component {
 
                         <CheckBox          
                           style={styles.checkboxStyle}
-                          onClick={() => this.checkbox(orderitems.itemId, orderitems.id, orderitems.itemName)}
+                          onClick={() => this.checkbox(orderitems.id, orderdetail.id, orderitems.itemName)}
                           checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
                           unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
                             style={{ color: 'transparent' }} />}
