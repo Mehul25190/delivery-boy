@@ -123,7 +123,7 @@ class ProductList extends React.Component {
   ValidateSize(file) {
     const File = file.length
     const size = Math.round((File / 1024))
-    if (file > 2048) {
+    if (size > 2048) {
       alert(
         "File too small, please select a file greater than 2mb");
     } else {
