@@ -231,6 +231,35 @@ class Delivered extends React.Component {
               <Picker.Item label="Not delivered" value="NOTDEL" />
             </Picker>
           </View>
+           <View style={{ marginLeft: 10, marginRight: 10, marginTop:20}}>
+          <Row style={{ justifyContent:'center', }}>
+                <Col >
+                <Text style={{ textAlign:'center'}}>Collect Cash</Text>
+                  <TouchableOpacity
+                    onPress={() => this.dialCall(orderdetail.mobileNo)} style={styles.collectCash}>
+                    <TextInput style={styles.CallText}
+                  placeholder="AED 100"
+                  placeholderTextColor='#ffffff'
+                  autoCapitalize="none"
+                  keyboardType={'numeric'}
+                  onChangeText={(text) => this.setState({ recivedby: text })} />
+                  </TouchableOpacity>
+                </Col>
+
+                <Col>
+                <Text style={{ textAlign:'center'}}>Change Return</Text>
+                  <TouchableOpacity
+                    onPress={() => Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + Address)} style={styles.collectReturn} >
+                    <TextInput style={styles.CallText}
+                  placeholder="AED 1"
+                  placeholderTextColor='#ffffff'
+                  autoCapitalize="none"
+                  keyboardType={'numeric'}
+                  onChangeText={(text) => this.setState({ recivedby: text })} />
+                  </TouchableOpacity>
+                </Col>
+              </Row>
+        </View>
 
           {
             this.state.selected == 'DEL' ?
@@ -247,7 +276,9 @@ class Delivered extends React.Component {
 
               : null
           }
-        </ScrollView>
+
+       
+        
         <View style={styles.doneBtnArea}>
           <Button priamary full style={styles.doneBtn}>
             <TouchableOpacity onPress={() => this.onPressSubmit(orderdetail.id, orderdetail.orderStatus)}>
@@ -255,6 +286,7 @@ class Delivered extends React.Component {
             </TouchableOpacity>
           </Button>
         </View>
+        </ScrollView>
 
       </Container>
 
