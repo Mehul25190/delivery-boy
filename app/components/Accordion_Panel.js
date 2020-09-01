@@ -103,10 +103,16 @@ class Accordion_Panel extends Component {
 
             }
           </View>
-          <Text style={[styles.Panel_text, { marginBottom: 10 }]}>{this.props.key}Location - {item.aptNo},{item.buildingName},{item.areaName},{item.cityName},{item.zipcode},{item.state} </Text>
+          <Text style={[styles.Panel_text, { marginBottom: 10 }]}>{this.props.key}Location - {item.aptNo}, {item.buildingName}, {item.areaName}, {item.cityName}, {item.zipcode}, {item.state} </Text>
           <View style={{ height: 1, width: '100%', backgroundColor: Colors.primary }} />
           <View style={{ marginVertical: 10, position: 'relative' }}>
-            <Text style={styles.Panel_text}>Status &nbsp; {item.orderStatus}</Text>
+            <Text style={styles.Panel_text}>Status - {(item.orderStatus=="DEL") ? "Delivered" : ""}
+                              {(item.orderStatus=="PEN") ? "Pending" : ""}
+                              {(item.orderStatus=="CAN") ? "Canceled" : ""}
+                              {(item.orderStatus=="CNF") ? "Confirmed" : ""}
+                              {(item.orderStatus=="RET") ? "Returned" : ""}
+                              {(item.orderStatus=="INP") ? "In Process" : ""}
+                              {(item.orderStatus=="PICKED") ? "PICKED" : ""}</Text>
             <Icon
               name='call'
               type='MaterialIcons'

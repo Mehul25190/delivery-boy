@@ -195,7 +195,7 @@ borderColor:Colors.primary, width:32, borderRadius:5, borderWidth:2
     fontSize:14
   },
   doneBtnArea:{
-  marginBottom:20
+  marginBottom:20, marginTop:10,
   },
   doneBtn:{
    
@@ -207,5 +207,26 @@ borderColor:Colors.primary, width:32, borderRadius:5, borderWidth:2
   btnTextDone:{
   fontFamily:'Font-Bold',
   fontSize:20
-  }
+  },
+  collectCash:{
+   marginTop: 10, justifyContent:'center', textAlign:'center', alignItems:'center',
+   backgroundColor:Colors.primary, marginRight:10,
+   color:Colors.white, flexDirection:'row', paddingTop:5, paddingBottom:5,
+   fontFamily:'Font-Medium',
+   marginBottom:10,
+  },
+  collectReturn:{
+   marginTop: 10, justifyContent:'center', textAlign:'center', alignItems:'center',
+   backgroundColor:Colors.primary, marginRight:0,
+   color:Colors.white, flexDirection:'row', paddingTop:5, paddingBottom:5,
+   fontFamily:'Font-Medium',
+   marginBottom:10,
+  },
+   CallText:{
+  flex:1, justifyContent:'center', textAlign:'center', alignItems:'center',
+  color:Colors.white,
+  fontFamily:'Font-Medium',
+  fontSize:18,
+  paddingTop:5
+ },
 };
