@@ -194,7 +194,7 @@ class Delivered extends React.Component {
                     /> */}
                   </Left>
                   <Body style={styles.bodyText}>
-                    <Text numberOfLines={1} style={styles.proTitle}>{orderitems.itemName}</Text>
+                    <Text numberOfLines={1} style={styles.proTitle}>Item {key+1}</Text>
 
 
                   </Body>

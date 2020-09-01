@@ -82,6 +82,8 @@ class Accordion_Panel extends Component {
           style={this.state.expanded == true ? styles.Btn : styles.btnWhite}>
 
           <Text style={this.state.expanded == true ? styles.Panel_Button_Text : styles.Panel_Button_gray}>Order Id - {this.props.item.orderNumber} </Text>
+          <Text style={this.state.expanded == true ? styles.Panel_Button_Text : styles.Panel_Button_gray}>Area - {this.props.item.areaName} </Text>
+
           {this.state.expanded == true ?
             (<Icon name='arrow-down' type='SimpleLineIcons' style={styles.IconStyle} />) :
             (<Icon name='arrow-up' type='SimpleLineIcons' style={styles.backIconStyle} />)
