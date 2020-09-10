@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ImageBackground, Image, TouchableOpacity, Linking, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, TouchableOpacity, Linking, TextInput, ScrollView, Alert } from 'react-native';
 import _ from 'lodash';
 import { Screens, Layout, Colors } from '../../constants';
 import { Logo, Statusbar, Headers } from '../../components';
@@ -35,7 +35,9 @@ class Delivered extends React.Component {
       selected: "NULL",
       isChecked: false,
       recivedby: '',
-      qty: ''
+      qty: '',
+      changeReturn: '',
+      collectCash: ''
     };
 
   }
@@ -123,10 +125,21 @@ class Delivered extends React.Component {
     });
   }
 
+  changeCollectCash(value, orderAmount){
+    var returnAmount = value - orderAmount;
+    if(returnAmount >= 0){
+      this.setState({ changeReturn: ""+returnAmount.toFixed(2)+"" })
+    }else{
+      this.setState({ changeReturn: '' }); 
+    }
+    //console.log (test)
+    this.setState({ collectCash: value })
+  }
+
   render() {
     const { navigation, orderitem, orderdetail } = this.props;
     var Address = orderdetail.aptNo + ',' + orderdetail.buildingName + ',' + orderdetail.areaName + ',' + orderdetail.cityName + ',' + orderdetail.zipcode + ',' + orderdetail.state
-
+console.log('rerawrwr', this.state.changeReturn)
     return (
       <Container style={appStyles.container}>
 
@@ -197,7 +210,7 @@ class Delivered extends React.Component {
                     <Text numberOfLines={1} style={styles.proTitle}>Item {key+1}</Text>
 
 
-                  </Body>
+                  </Body> 
                   <Right style={styles.ListRight}>
 
 
@@ -242,7 +255,7 @@ class Delivered extends React.Component {
                   placeholderTextColor='#ffffff'
                   autoCapitalize="none"
                   keyboardType={'numeric'}
-                  onChangeText={(text) => this.setState({ recivedby: text })} />
+                  onChangeText={(value) => this.changeCollectCash(value, orderdetail.paymentAmount)} />
                   </TouchableOpacity>
                 </Col>
 
@@ -254,8 +267,11 @@ class Delivered extends React.Component {
                   placeholder="AED 1"
                   placeholderTextColor='#ffffff'
                   autoCapitalize="none"
-                  keyboardType={'numeric'}
-                  onChangeText={(text) => this.setState({ recivedby: text })} />
+                  //keyboardType={'numeric'}
+                  //onChangeText = {this.state.changeReturn}
+                  value={this.state.changeReturn}
+                  //onChangeText={(text) => this.setState({ changeReturn: text })} 
+                  />
                   </TouchableOpacity>
                 </Col>
               </Row>
