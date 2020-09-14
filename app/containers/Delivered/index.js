@@ -90,7 +90,7 @@ class Delivered extends React.Component {
   };
 
 
-  onPressSubmit(id, status) {
+  onPressSubmit(id, status, paymentMode, orderAmount) {
     if (this.state.selected == 'NULL') {
       return showToast("Please Select Status Field", "danger")
     }
@@ -98,6 +98,14 @@ class Delivered extends React.Component {
       if (this.state.recivedby == '') {
         return showToast("Please Select Recived by", "danger")
       }
+    }
+
+    if(paymentMode == 'COD' && this.state.collectCash == ""){
+      return showToast("Please enter collect cash", "danger")
+    }
+
+    if(paymentMode == 'COD' && this.state.collectCash < orderAmount){
+      return showToast("Please enter valid collect cash, Order amount is "+ orderAmount, "danger")
     }
     this.props.updatestatus(id, this.state.selected, this.state.recivedby).then(res => {
       if (res.status == "success") {
@@ -251,7 +259,7 @@ console.log('rerawrwr', orderdetail)
                 <Col >
                 <Text style={{ textAlign:'center'}}>Collect Cash</Text>
                   <TouchableOpacity
-                    onPress={() => this.dialCall(orderdetail.mobileNo)} style={styles.collectCash}>
+                   style={styles.collectCash}>
                     <TextInput style={styles.CallText}
                   placeholder="AED 100"
                   placeholderTextColor='#ffffff'
@@ -264,9 +272,10 @@ console.log('rerawrwr', orderdetail)
                 <Col>
                 <Text style={{ textAlign:'center'}}>Change Return</Text>
                   <TouchableOpacity
-                    onPress={() => Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + Address)} style={styles.collectReturn} >
+                     style={styles.collectReturn} >
                     <TextInput style={styles.CallText}
                   placeholder="AED 1"
+                  editable = {false}
                   placeholderTextColor='#ffffff'
                   autoCapitalize="none"
                   //keyboardType={'numeric'}
@@ -299,7 +308,7 @@ console.log('rerawrwr', orderdetail)
         
         <View style={styles.doneBtnArea}>
           <Button priamary full style={styles.doneBtn}>
-            <TouchableOpacity onPress={() => this.onPressSubmit(orderdetail.id, orderdetail.orderStatus)}>
+            <TouchableOpacity onPress={() => this.onPressSubmit(orderdetail.id, orderdetail.orderStatus, orderdetail.paymentMode, orderdetail.paymentAmount)}>
               <Text style={styles.btnTextDone}>Save</Text>
             </TouchableOpacity>
           </Button>
