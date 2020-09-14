@@ -139,7 +139,7 @@ class Delivered extends React.Component {
   render() {
     const { navigation, orderitem, orderdetail } = this.props;
     var Address = orderdetail.aptNo + ',' + orderdetail.buildingName + ',' + orderdetail.areaName + ',' + orderdetail.cityName + ',' + orderdetail.zipcode + ',' + orderdetail.state
-console.log('rerawrwr', this.state.changeReturn)
+console.log('rerawrwr', orderdetail)
     return (
       <Container style={appStyles.container}>
 
@@ -227,7 +227,7 @@ console.log('rerawrwr', this.state.changeReturn)
           </Card>
 
 
-          <View>
+          <View style={{marginBottom:20}}>
             <Picker
               headerStyle={{ backgroundColor: Colors.primary }}
               mode="dropdown"
@@ -244,7 +244,9 @@ console.log('rerawrwr', this.state.changeReturn)
               <Picker.Item label="Not delivered" value="NOTDEL" />
             </Picker>
           </View>
-           <View style={{ marginLeft: 10, marginRight: 10, marginTop:20}}>
+
+          {orderdetail.paymentMode == 'COD'  ?
+           (<View style={{ marginLeft: 10, marginRight: 10}}>
           <Row style={{ justifyContent:'center', }}>
                 <Col >
                 <Text style={{ textAlign:'center'}}>Collect Cash</Text>
@@ -275,7 +277,7 @@ console.log('rerawrwr', this.state.changeReturn)
                   </TouchableOpacity>
                 </Col>
               </Row>
-        </View>
+        </View>) : null }
 
           {
             this.state.selected == 'DEL' ?
