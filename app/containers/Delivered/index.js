@@ -155,7 +155,7 @@ console.log('rerawrwr', orderdetail)
             <View style={{ paddingLeft: 10, paddingTop: 10 }}>
               <View style={styles.orderInfo}>
                 <Text style={styles.orderId}>
-                  Order ID - {orderdetail.orderNumber}{orderdetail.orderStatus}
+                  Order ID - {orderdetail.orderNumber}
                 </Text>
                 <Text style={styles.Qty}>
                   {orderdetail.itemCount} Items
