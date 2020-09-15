@@ -264,7 +264,7 @@ console.log('rerawrwr', orderdetail)
                   <TouchableOpacity
                    style={styles.collectCash}>
                     <TextInput style={styles.CallText}
-                  placeholder="AED 100"
+                  //placeholder="AED 100"
                   placeholderTextColor='#ffffff'
                   autoCapitalize="none"
                   keyboardType={'numeric'}
@@ -277,7 +277,7 @@ console.log('rerawrwr', orderdetail)
                   <TouchableOpacity
                      style={styles.collectReturn} >
                     <TextInput style={styles.CallText}
-                  placeholder="AED 1"
+                  //placeholder="AED 1"
                   editable = {false}
                   placeholderTextColor='#ffffff'
                   autoCapitalize="none"

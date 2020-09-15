@@ -322,8 +322,11 @@ class ProductList extends React.Component {
                   </TouchableOpacity>
                 </Col>
               </Row>
-
+              
             </Grid>
+            <Card style={{ height: 'auto', backgroundColor:'#D7ECDD', padding:10 }}>
+                <Text style={{ fontSize: 14, color:'#00545F', fontWeight:'bold'}}>(To return, press checkbox after putting quantity)</Text>
+              </Card>
             {orderitem.map((orderitems, index) => (
               <View>
               {orderitems.itemStatus == 'RET' ? 
@@ -365,12 +368,12 @@ class ProductList extends React.Component {
                           unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
                             style={{ color: 'transparent' }} />}
                           isChecked={this.state.qty.indexOf(orderitems.id) !== -1}
-                          
                         />
                       </Right>
                       
+                      
                   }
-
+                  
                 </ListItem>
               </View>) : null }
               </View>
