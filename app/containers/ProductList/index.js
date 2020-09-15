@@ -11,7 +11,7 @@ import {
   Spinner,
   Button,
   Text,
-  Header, Left, Body, Title, Right, Card, Grid, Col, Row, ListItem, Item, Input, label
+  Header, Left, Body, Title, Right, Card, Grid, Col, Row, ListItem, Item, Input, label, Thumbnail
 } from 'native-base';
 import { connect } from "react-redux";
 import * as userActions from "../../actions/user";
@@ -154,10 +154,12 @@ class ProductList extends React.Component {
         console.log("ZERO",folder.length)
         array.push(clickIndex)
         this.setState({ qty: array, });
+        console.log("qty",this.state.qty)
         this.props.pickedOrder(this.data).then(res => {
           if (res.status == "success") {
             this.setState({ image: '' })
-            return showToast(Name + " is Picked-Up", "success")
+            showToast(Name + " is Picked-Up", "success")
+            this.props.navigation.goBack(null)
           }
         })
       } else {
@@ -362,9 +364,11 @@ class ProductList extends React.Component {
                           checkedImage={<Icon name='check' type='AntDesign' style={{ color: Colors.primary, paddingLeft: 5, paddingTop: 1 }} />}
                           unCheckedImage={<Icon name='check-box-outline-blank' type=' MaterialIcons'
                             style={{ color: 'transparent' }} />}
-                          isChecked={this.state.qty.indexOf(orderitems.itemId) !== -1}
+                          isChecked={this.state.qty.indexOf(orderitems.id) !== -1}
+                          
                         />
                       </Right>
+                      
                   }
 
                 </ListItem>

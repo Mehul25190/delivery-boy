@@ -165,6 +165,9 @@ console.log('rerawrwr', orderdetail)
                 <Text style={styles.orderId}>
                   Order ID - {orderdetail.orderNumber}
                 </Text>
+                <Text style={styles.orderId}>
+                  Order Amounts - AED {orderdetail.paymentAmount}
+                </Text>
                 <Text style={styles.Qty}>
                   {orderdetail.itemCount} Items
                 </Text>
