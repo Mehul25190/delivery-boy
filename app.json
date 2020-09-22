@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Delivery Boy",
-    "slug": "Deliveryboy",
+    "slug": "delivery-boy",
     "description": "Delivery Boy is the application in which a delivery boy see list order and track them",
     "privacy": "public",
     "platforms": [
