@@ -101,7 +101,7 @@ class ProductList extends React.Component {
       allowsEditing: true,
       base64: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.1,
     });
     if (!result.cancelled) {
       this.ValidateSize(result.base64)
@@ -114,7 +114,7 @@ class ProductList extends React.Component {
       allowsEditing: true,
       base64: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.1,
     });
     if (!result.cancelled) {
       this.ValidateSize(result.base64)
@@ -123,12 +123,13 @@ class ProductList extends React.Component {
   ValidateSize(file) {
     const File = file.length
     const size = Math.round((File / 1024))
-    if (size > 2048) {
+    this.setState({ image: file });
+    /*if (size > 2048) {
       alert(
         "File too small, please select a file greater than 2mb");
     } else {
       this.setState({ image: file });
-    }
+    }*/
   }
 
 
