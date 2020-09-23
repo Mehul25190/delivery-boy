@@ -107,6 +107,7 @@ class Delivered extends React.Component {
     if(paymentMode == 'COD' && this.state.collectCash < orderAmount){
       return showToast("Please enter valid collect cash, Order amount is "+ orderAmount, "danger")
     }
+
     this.props.updatestatus(id, this.state.selected, this.state.recivedby).then(res => {
       if (res.status == "success") {
 
@@ -334,9 +335,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(userActions.logoutUser()),
-    updatestatus: (id, status) => dispatch(orderActions.updatestatus({
+    updatestatus: (id, status,recivedby) => dispatch(orderActions.updatestatus({
       'orderId': id,
       'status': status,
+      'receivedBy': recivedby
     })),
     orderlist: (id, status) => dispatch(orderActions.orderlist({
       'deliveryBoyId': id,

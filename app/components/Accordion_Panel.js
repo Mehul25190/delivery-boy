@@ -96,8 +96,8 @@ class Accordion_Panel extends Component {
 
         <TouchableOpacity onPress={this.props.pressClick} style={{ height: this.state.updated_Height, overflow: 'hidden', paddingLeft: Layout.indent, paddingRight: Layout.indent }}>
           <View>
-            <Text style={styles.Panel_text}>Customer - {item.firstName} {item.lastName} </Text>
-            {this.props.item.ringBell == 0 ?
+            <Text style={styles.Panel_text}>Customer - {item.firstName} {item.lastName}</Text>
+            {this.props.item.ringBell == 1 ?
               (<Icon name='bell' type='MaterialCommunityIcons' style={styles.bellIconStyle} />) :
               (<Icon name='bell-off' type='MaterialCommunityIcons' style={styles.bellIconStyle} />)
 

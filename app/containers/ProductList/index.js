@@ -79,9 +79,9 @@ class ProductList extends React.Component {
   _pickImage = async (clickIndex) => {
     Alert.alert(
       'Select Image',
-      'Please select Image mediam for pickup.',
+      'Please add image to help us to judge your refund.',
       [
-        { text: 'Open Camera', onPress: () => this.Camera(clickIndex) },
+        //{ text: 'Open Camera', onPress: () => this.Camera(clickIndex) },
         { text: 'Open Gellary', onPress: () => this.Gellary(clickIndex) },
         {
           text: 'Cancel',
